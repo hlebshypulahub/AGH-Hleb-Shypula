@@ -1,1 +1,0 @@
-# Hleb Shypula - Projekt Inżynierski
