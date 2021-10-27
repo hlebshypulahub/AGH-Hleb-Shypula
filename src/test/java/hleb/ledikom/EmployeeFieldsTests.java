@@ -8,22 +8,52 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import hleb.ledikom.model.Employee;
+import hleb.ledikom.model.NotificationTerm;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
+import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class EmployeeFieldsTests {
 
+    private Employee employee;
+    private NotificationTerm notificationTerm;
+
+    @BeforeEach
+    public void before() {
+        employee = new Employee();
+        employee.setCategory("Kategoria X");
+        employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
+        employee.setCategoryAssignmentDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(5));
+        employee.setDocsSubmitDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(4).plusMonths(9));
+
+        notificationTerm = new NotificationTerm();
+    }
+
+    @AfterEach
+    public void after() {
+        employee = null;
+        notificationTerm = null;
+    }
+
     @Test
     public void testEmployeeCategory() {
-        Employee employee = new Employee("Kategoria X");
         assertEquals(employee.getCategory(), "Kategoria X");
+    }
+
+    @Test
+    public void testEmployeeCategoryNotExistence() {
+        Employee employee = new Employee("Brak");
+        assertEquals(employee.getCategory(), "Brak");
     }
 
     static class DateTest {
@@ -42,4 +72,17 @@ public class EmployeeFieldsTests {
         assertEquals(Employee.ACT_ENTRY_INTO_FORCE_DATE, dateTest.date);
     }
 
+    @Test
+    public void testEmployeeDeadlineNotification() {
+        notificationTerm.setDays(365);
+        assertEquals(Math.abs(DAYS.between(employee.getCategoryAssignmentDeadlineDate(), LocalDate.of(2025, 7, 23))), notificationTerm.getDays());
+
+        notificationTerm.setDays(200);
+        assertTrue(Math.abs(DAYS.between(employee.getDocsSubmitDeadlineDate(), LocalDate.of(2025, 7, 23))) > notificationTerm.getDays());
+    }
+
+    @Test
+    public void testEmployeeCategoryAssignmentDate() {
+        assertEquals(employee.getCategoryAssignmentDate(), LocalDate.of(2020, 5, 5));
+    }
 }
