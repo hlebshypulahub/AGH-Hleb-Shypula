@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import hleb.ledikom.model.Category;
 import hleb.ledikom.model.Employee;
 import hleb.ledikom.model.NotificationTerm;
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class EmployeeFieldsTests {
     @BeforeEach
     public void before() {
         employee = new Employee();
-        employee.setCategory("Kategoria X");
+        employee.setCategory(Category.FIRST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
         employee.setCategoryAssignmentDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(5));
         employee.setDocsSubmitDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(4).plusMonths(9));
@@ -47,13 +48,13 @@ public class EmployeeFieldsTests {
 
     @Test
     public void testEmployeeCategory() {
-        assertEquals(employee.getCategory(), "Kategoria X");
+        assertEquals(employee.getCategory().toString(), "Pierwsza");
     }
 
     @Test
     public void testEmployeeCategoryNotExistence() {
-        Employee employee = new Employee("Brak");
-        assertEquals(employee.getCategory(), "Brak");
+        Employee employee = new Employee(Category.NONE);
+        assertEquals(employee.getCategory().toString(), "Brak");
     }
 
     static class DateTest {

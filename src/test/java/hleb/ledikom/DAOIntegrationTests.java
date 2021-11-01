@@ -1,5 +1,6 @@
 package hleb.ledikom;
 
+import hleb.ledikom.model.Category;
 import hleb.ledikom.model.Employee;
 import hleb.ledikom.model.NotificationTerm;
 import org.junit.After;
@@ -31,7 +32,7 @@ public class DAOIntegrationTests {
     @Before
     public void before() {
         employee = new Employee();
-        employee.setCategory("Kategoria X");
+        employee.setCategory(Category.HIGHEST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020,5,5));
         employee.setCategoryAssignmentDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(5));
         employee.setDocsSubmitDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(4).plusMonths(9));

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Employee {
     public static final LocalDate ACT_ENTRY_INTO_FORCE_DATE = LocalDate.of(2021,7,23);
 
-    private String category;
+    private Category category;
     private LocalDate categoryAssignmentDate;
     private LocalDate categoryAssignmentDeadlineDate;
     private LocalDate docsSubmitDeadlineDate;
@@ -14,15 +14,15 @@ public class Employee {
 
     }
 
-    public Employee(String category) {
+    public Employee(Category category) {
         this.category = category;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
