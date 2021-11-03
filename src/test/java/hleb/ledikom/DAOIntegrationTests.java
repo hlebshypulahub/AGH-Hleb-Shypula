@@ -32,7 +32,7 @@ public class DAOIntegrationTests {
     @Before
     public void before() {
         employee = new Employee();
-        employee.setCategory(EmployeeCategory.HIGHEST);
+        employee.setEmployeeCategory(EmployeeCategory.HIGHEST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020,5,5));
         employee.setCategoryAssignmentDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(5));
         employee.setDocsSubmitDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(4).plusMonths(9));

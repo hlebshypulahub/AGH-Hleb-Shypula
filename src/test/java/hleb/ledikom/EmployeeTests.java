@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import hleb.ledikom.model.EmployeeCategory;
 import hleb.ledikom.model.Employee;
+import hleb.ledikom.model.EmployeeCategory;
 import hleb.ledikom.model.NotificationTerm;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,12 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class EmployeeFieldsTests {
+public class EmployeeTests {
 
     private Employee employee;
     private NotificationTerm notificationTerm;
@@ -32,10 +31,8 @@ public class EmployeeFieldsTests {
     @BeforeEach
     public void before() {
         employee = new Employee();
-        employee.setCategory(EmployeeCategory.FIRST);
+        employee.setEmployeeCategory(EmployeeCategory.FIRST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
-        employee.setCategoryAssignmentDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(5));
-        employee.setDocsSubmitDeadlineDate(Employee.ACT_ENTRY_INTO_FORCE_DATE.plusYears(4).plusMonths(9));
         employee.setActive(true);
 
         notificationTerm = new NotificationTerm();
@@ -49,13 +46,13 @@ public class EmployeeFieldsTests {
 
     @Test
     public void testEmployeeCategory() {
-        assertEquals(employee.getCategory().toString(), "Pierwsza");
+        assertEquals(employee.getEmployeeCategory().toString(), "Pierwsza");
     }
 
     @Test
     public void testEmployeeCategoryNotExistence() {
         Employee employee = new Employee(EmployeeCategory.NONE);
-        assertEquals(employee.getCategory().toString(), "Brak");
+        assertEquals(employee.getEmployeeCategory().toString(), "Brak");
     }
 
     static class DateTest {
@@ -75,21 +72,13 @@ public class EmployeeFieldsTests {
     }
 
     @Test
-    public void testEmployeeDeadlineNotification() {
-        notificationTerm.setDays(365);
-        assertEquals(Math.abs(DAYS.between(employee.getCategoryAssignmentDeadlineDate(), LocalDate.of(2025, 7, 23))), notificationTerm.getDays());
-
-        notificationTerm.setDays(200);
-        assertTrue(Math.abs(DAYS.between(employee.getDocsSubmitDeadlineDate(), LocalDate.of(2025, 7, 23))) > notificationTerm.getDays());
-    }
-
-    @Test
-    public void testEmployeeCategoryAssignmentDate() {
-        assertEquals(employee.getCategoryAssignmentDate(), LocalDate.of(2020, 5, 5));
-    }
-
-    @Test
     public void testEmployeeActive() {
         assertTrue(employee.isActive());
+    }
+
+    @Test
+    public void testEmployeeDefaultCategory() {
+        employee = new Employee();
+        assertEquals(employee.getEmployeeCategory().toString(), "Brak");
     }
 }
