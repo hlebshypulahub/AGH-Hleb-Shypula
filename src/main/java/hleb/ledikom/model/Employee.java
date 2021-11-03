@@ -5,25 +5,27 @@ import java.time.LocalDate;
 public class Employee {
     public static final LocalDate ACT_ENTRY_INTO_FORCE_DATE = LocalDate.of(2021,7,23);
 
-    private Category category;
+    private EmployeeCategory employeeCategory;
     private LocalDate categoryAssignmentDate;
     private LocalDate categoryAssignmentDeadlineDate;
     private LocalDate docsSubmitDeadlineDate;
+
+    private boolean active;
 
     public Employee() {
 
     }
 
-    public Employee(Category category) {
-        this.category = category;
+    public Employee(EmployeeCategory employeeCategory) {
+        this.employeeCategory = employeeCategory;
     }
 
-    public Category getCategory() {
-        return category;
+    public EmployeeCategory getCategory() {
+        return employeeCategory;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(EmployeeCategory employeeCategory) {
+        this.employeeCategory = employeeCategory;
     }
 
     public void setCategoryAssignmentDeadlineDate(LocalDate categoryAssignmentDeadlineDate) {
@@ -48,5 +50,13 @@ public class Employee {
 
     public void setCategoryAssignmentDate(LocalDate categoryAssignmentDate) {
         this.categoryAssignmentDate = categoryAssignmentDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

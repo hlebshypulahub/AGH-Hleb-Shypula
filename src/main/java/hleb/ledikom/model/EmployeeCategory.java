@@ -1,18 +1,19 @@
 package hleb.ledikom.model;
 
-public enum Category {
+public enum EmployeeCategory {
 
     HIGHEST("Wyższa"),
     FIRST("Pierwsza"),
     SECOND("Druga"),
     NONE("Brak");
 
-    public final String label;
+    private final String label;
 
-    Category(String label) {
+    EmployeeCategory(String label) {
         this.label = label;
     }
 
+    @Override
     public String toString() {
         return label;
     }

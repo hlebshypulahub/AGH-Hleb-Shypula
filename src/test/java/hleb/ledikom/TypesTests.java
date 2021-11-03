@@ -1,6 +1,6 @@
 package hleb.ledikom;
 
-import hleb.ledikom.model.Category;
+import hleb.ledikom.model.EmployeeCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,7 +11,7 @@ public class TypesTests {
 
     @Test
     public void testCategoryToString() {
-        assertEquals(Category.SECOND.toString(), "Druga");
+        assertEquals(EmployeeCategory.SECOND.toString(), "Druga");
     }
 
 }
