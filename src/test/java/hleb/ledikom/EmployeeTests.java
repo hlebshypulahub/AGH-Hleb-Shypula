@@ -19,8 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class EmployeeTests {
@@ -79,6 +78,11 @@ public class EmployeeTests {
     @Test
     public void testEmployeeDefaultCategory() {
         employee = new Employee();
-        assertEquals(employee.getEmployeeCategory().toString(), "Brak");
+        assertNull(employee.getEmployeeCategory());
+    }
+
+    @Test
+    public void testEmployeeCategoryAssignmentDate() {
+        assertEquals(employee.getCategoryAssignmentDate(), LocalDate.of(2020, 5, 5));
     }
 }

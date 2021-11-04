@@ -1,15 +1,8 @@
 package hleb.ledikom.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Transient;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class Employee {
     @Transient
     public static final LocalDate ACT_ENTRY_INTO_FORCE_DATE = LocalDate.of(2021, 7, 23);
@@ -26,11 +19,11 @@ public class Employee {
     private LocalDate docsSubmitDeadlineDate;
     private LocalDate categoryPossiblePromotionDate;
 
-    {
-        this.employeeCategory = EmployeeCategory.NONE;
-    }
-
     private boolean active;
+
+    public Employee() {
+
+    }
 
     public Employee(EmployeeCategory employeeCategory) {
         this.employeeCategory = employeeCategory;
@@ -38,21 +31,65 @@ public class Employee {
 
     public void setCategoryAssignmentDate(LocalDate categoryAssignmentDate) {
         this.categoryAssignmentDate = categoryAssignmentDate;
-        this.setCategoryPossiblePromotionDate();
-        this.setCategoryAssignmentAndDocsSubmitDeadlineDates();
+//        this.setCategoryPossiblePromotionDate();
+//        this.setCategoryAssignmentAndDocsSubmitDeadlineDates();
     }
 
-    private void setCategoryPossiblePromotionDate() {
-        this.categoryPossiblePromotionDate = this.categoryAssignmentDate.plusYears(CATEGORY_POSSIBLE_PROMOTION_YEARS);
+//    private void setCategoryPossiblePromotionDate() {
+//        this.categoryPossiblePromotionDate = this.categoryAssignmentDate.plusYears(CATEGORY_POSSIBLE_PROMOTION_YEARS);
+//    }
+
+//    private void setCategoryAssignmentAndDocsSubmitDeadlineDates() {
+//        if (this.categoryAssignmentDate.isBefore(ACT_ENTRY_INTO_FORCE_DATE)) {
+//            this.categoryAssignmentDeadlineDate = ACT_ENTRY_INTO_FORCE_DATE.plusYears(CATEGORY_VERIFICATION_YEARS);
+//            this.docsSubmitDeadlineDate =this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
+//        } else {
+//            this.categoryAssignmentDeadlineDate = this.categoryAssignmentDate.plusYears(CATEGORY_VERIFICATION_YEARS);
+//            this.docsSubmitDeadlineDate = this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
+//        }
+//    }
+
+    public EmployeeCategory getEmployeeCategory() {
+        return employeeCategory;
     }
 
-    private void setCategoryAssignmentAndDocsSubmitDeadlineDates() {
-        if (this.categoryAssignmentDate.isBefore(ACT_ENTRY_INTO_FORCE_DATE)) {
-            this.categoryAssignmentDeadlineDate = ACT_ENTRY_INTO_FORCE_DATE.plusYears(CATEGORY_VERIFICATION_YEARS);
-            this.docsSubmitDeadlineDate =this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
-        } else {
-            this.categoryAssignmentDeadlineDate = this.categoryAssignmentDate.plusYears(CATEGORY_VERIFICATION_YEARS);
-            this.docsSubmitDeadlineDate = this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
-        }
+    public void setEmployeeCategory(EmployeeCategory employeeCategory) {
+        this.employeeCategory = employeeCategory;
+    }
+
+    public LocalDate getCategoryAssignmentDate() {
+        return categoryAssignmentDate;
+    }
+
+    public LocalDate getCategoryAssignmentDeadlineDate() {
+        return categoryAssignmentDeadlineDate;
+    }
+
+    public void setCategoryAssignmentDeadlineDate(LocalDate categoryAssignmentDeadlineDate) {
+        this.categoryAssignmentDeadlineDate = categoryAssignmentDeadlineDate;
+    }
+
+    public LocalDate getDocsSubmitDeadlineDate() {
+        return docsSubmitDeadlineDate;
+    }
+
+    public void setDocsSubmitDeadlineDate(LocalDate docsSubmitDeadlineDate) {
+        this.docsSubmitDeadlineDate = docsSubmitDeadlineDate;
+    }
+
+    public LocalDate getCategoryPossiblePromotionDate() {
+        return categoryPossiblePromotionDate;
+    }
+
+    public void setCategoryPossiblePromotionDate(LocalDate categoryPossiblePromotionDate) {
+        this.categoryPossiblePromotionDate = categoryPossiblePromotionDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
