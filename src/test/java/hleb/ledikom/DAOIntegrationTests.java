@@ -1,8 +1,8 @@
 package hleb.ledikom;
 
-import hleb.ledikom.model.EmployeeCategory;
-import hleb.ledikom.model.Employee;
-import hleb.ledikom.model.NotificationTerm;
+import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.NotificationTerm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

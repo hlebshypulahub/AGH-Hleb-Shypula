@@ -1,7 +1,7 @@
-package hleb.ledikom.controller;
+package hleb.ledikom.controller.employee;
 
-import hleb.ledikom.model.Employee;
-import hleb.ledikom.model.EmployeeCategory;
+import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.EmployeeCategory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,6 +1,6 @@
-package hleb.ledikom.service;
+package hleb.ledikom.service.employee;
 
-import hleb.ledikom.model.Employee;
+import hleb.ledikom.model.employee.Employee;
 import org.springframework.stereotype.Service;
 
 @Service

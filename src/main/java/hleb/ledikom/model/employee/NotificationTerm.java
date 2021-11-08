@@ -1,4 +1,4 @@
-package hleb.ledikom.model;
+package hleb.ledikom.model.employee;
 
 import javax.persistence.*;
 

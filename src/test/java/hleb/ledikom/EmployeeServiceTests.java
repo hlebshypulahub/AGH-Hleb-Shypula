@@ -1,9 +1,9 @@
 package hleb.ledikom;
 
-import hleb.ledikom.model.Employee;
-import hleb.ledikom.model.EmployeeCategory;
-import hleb.ledikom.model.NotificationTerm;
-import hleb.ledikom.service.EmployeeService;
+import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.NotificationTerm;
+import hleb.ledikom.service.employee.EmployeeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

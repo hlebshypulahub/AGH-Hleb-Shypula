@@ -1,7 +1,7 @@
 package hleb.ledikom;
 
-import hleb.ledikom.model.CertificationExemptionReason;
-import hleb.ledikom.model.EmployeeCategory;
+import hleb.ledikom.model.employee.CertificationExemptionReason;
+import hleb.ledikom.model.employee.EmployeeCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
