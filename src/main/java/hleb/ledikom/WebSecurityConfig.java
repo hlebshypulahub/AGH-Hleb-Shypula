@@ -1,4 +1,4 @@
-package hleb.ledikom.security.config;
+package hleb.ledikom;
 
 import hleb.ledikom.security.filter.AuthTokenFilter;
 import hleb.ledikom.security.util.AuthEntryPointJwt;

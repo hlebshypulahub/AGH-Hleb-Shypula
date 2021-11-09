@@ -19,10 +19,44 @@ public class Employee {
     private LocalDate docsSubmitDeadlineDate;
     private LocalDate categoryPossiblePromotionDate;
 
+    private CertificationExemptionReason certificationExemptionReason;
+    private LocalDate exemptionStartDate;
+    private LocalDate exemptionEndDate;
+    private boolean exemptioned;
+
     private boolean active;
 
     public Employee() {
 
+    }
+
+    public Employee(Employee other) {
+        this.employeeCategory = other.employeeCategory;
+        this.categoryAssignmentDate = other.categoryAssignmentDate;
+        this.categoryAssignmentDeadlineDate = other.categoryAssignmentDeadlineDate;
+        this.docsSubmitDeadlineDate = other.docsSubmitDeadlineDate;
+        this.categoryPossiblePromotionDate = other.categoryPossiblePromotionDate;
+        this.certificationExemptionReason = other.certificationExemptionReason;
+        this.exemptionStartDate = other.exemptionStartDate;
+        this.exemptionEndDate = other.exemptionEndDate;
+        this.exemptioned = other.exemptioned;
+        this.active = other.active;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeCategory=" + employeeCategory +
+                ", categoryAssignmentDate=" + categoryAssignmentDate +
+                ", categoryAssignmentDeadlineDate=" + categoryAssignmentDeadlineDate +
+                ", docsSubmitDeadlineDate=" + docsSubmitDeadlineDate +
+                ", categoryPossiblePromotionDate=" + categoryPossiblePromotionDate +
+                ", certificationExemptionReason=" + certificationExemptionReason +
+                ", exemptionStartDate=" + exemptionStartDate +
+                ", exemptionEndDate=" + exemptionEndDate +
+                ", exemptioned=" + exemptioned +
+                ", active=" + active +
+                '}';
     }
 
     public Employee(EmployeeCategory employeeCategory) {
@@ -31,23 +65,7 @@ public class Employee {
 
     public void setCategoryAssignmentDate(LocalDate categoryAssignmentDate) {
         this.categoryAssignmentDate = categoryAssignmentDate;
-//        this.setCategoryPossiblePromotionDate();
-//        this.setCategoryAssignmentAndDocsSubmitDeadlineDates();
     }
-
-//    private void setCategoryPossiblePromotionDate() {
-//        this.categoryPossiblePromotionDate = this.categoryAssignmentDate.plusYears(CATEGORY_POSSIBLE_PROMOTION_YEARS);
-//    }
-
-//    private void setCategoryAssignmentAndDocsSubmitDeadlineDates() {
-//        if (this.categoryAssignmentDate.isBefore(ACT_ENTRY_INTO_FORCE_DATE)) {
-//            this.categoryAssignmentDeadlineDate = ACT_ENTRY_INTO_FORCE_DATE.plusYears(CATEGORY_VERIFICATION_YEARS);
-//            this.docsSubmitDeadlineDate =this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
-//        } else {
-//            this.categoryAssignmentDeadlineDate = this.categoryAssignmentDate.plusYears(CATEGORY_VERIFICATION_YEARS);
-//            this.docsSubmitDeadlineDate = this.categoryAssignmentDeadlineDate.minusMonths(DOCS_SUBMIT_MONTHS);
-//        }
-//    }
 
     public EmployeeCategory getEmployeeCategory() {
         return employeeCategory;
@@ -91,5 +109,37 @@ public class Employee {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public CertificationExemptionReason getCertificationExemptionReason() {
+        return certificationExemptionReason;
+    }
+
+    public void setCertificationExemptionReason(CertificationExemptionReason certificationExemptionReason) {
+        this.certificationExemptionReason = certificationExemptionReason;
+    }
+
+    public LocalDate getExemptionStartDate() {
+        return exemptionStartDate;
+    }
+
+    public void setExemptionStartDate(LocalDate exemptionStartDate) {
+        this.exemptionStartDate = exemptionStartDate;
+    }
+
+    public LocalDate getExemptionEndDate() {
+        return exemptionEndDate;
+    }
+
+    public void setExemptionEndDate(LocalDate exemptionEndDate) {
+        this.exemptionEndDate = exemptionEndDate;
+    }
+
+    public boolean isExemptioned() {
+        return exemptioned;
+    }
+
+    public void setExemptioned(boolean exemptioned) {
+        this.exemptioned = exemptioned;
     }
 }
