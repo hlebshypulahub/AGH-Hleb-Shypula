@@ -96,4 +96,9 @@ public class EmployeeTests {
     public void testEmployeeExemptionEndDate() {
         assertEquals(employee.getExemptionEndDate(), LocalDate.of(2023, 3, 14));
     }
+
+    @Test
+    public void testCourseHoursSumDefault() {
+        assertEquals(employee.getCourseHoursSum(), 0);
+    }
 }

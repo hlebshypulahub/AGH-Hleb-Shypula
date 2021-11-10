@@ -1,9 +1,7 @@
 package hleb.ledikom;
 
-import hleb.ledikom.model.employee.CertificationExemptionReason;
-import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.EmployeeCategory;
-import hleb.ledikom.model.employee.NotificationTerm;
+import hleb.ledikom.model.employee.*;
+import hleb.ledikom.service.course.CourseService;
 import hleb.ledikom.service.employee.EmployeeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +20,8 @@ public class EmployeeServiceTests {
 
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private CourseService courseService;
 
     private Employee employeeBeforeAct;
     private Employee employeeAfterAct;
@@ -32,9 +33,8 @@ public class EmployeeServiceTests {
         employeeBeforeAct = new Employee();
         employeeBeforeAct.setEmployeeCategory(EmployeeCategory.FIRST);
         employeeBeforeAct.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
-        employeeBeforeAct.setActive(true);
 
-        employeeBeforeAct.setExemptioned(false);
+        employeeBeforeAct.setCourses(new HashSet<>());
 
         employeeBeforeAct = employeeService.process(employeeBeforeAct);
 
@@ -43,8 +43,6 @@ public class EmployeeServiceTests {
         employeeAfterAct.setEmployeeCategory(EmployeeCategory.HIGHEST);
         employeeAfterAct.setCategoryAssignmentDate(LocalDate.of(2022, 3, 15));
         employeeAfterAct = employeeService.process(employeeAfterAct);
-
-        employeeAfterAct.setExemptioned(false);
 
         employeeAfterAct = employeeService.process(employeeAfterAct);
 
@@ -150,15 +148,15 @@ public class EmployeeServiceTests {
         assertEquals(LocalDate.of(2027, 4,23), employeeBeforeAct.getDocsSubmitDeadlineDate());
     }
 
-    /// Test 6
-    @Test
-    public void testEmployeePregnancyExemption() {
-        employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.PREGNANCY);
-        employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5,5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
-        assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
-        assertTrue(employeeBeforeAct.isExemptioned());
-    }
+//    /// Test 6
+//    @Test
+//    public void testEmployeePregnancyExemption() {
+//        employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.PREGNANCY);
+//        employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5,5));
+//        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+//        assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
+//        assertTrue(employeeBeforeAct.isExemptioned());
+//    }
 
     /// Test 7
     @Test
@@ -264,5 +262,21 @@ public class EmployeeServiceTests {
         employeeBeforeAct = employeeService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2027, 10,14), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertFalse(employeeBeforeAct.isExemptioned());
+    }
+
+    /// Test 16
+    @Test
+    public void testEmployeeSetCategory() {
+        Course course = new Course();
+        course.setHours(50);
+        course.setStartDate(LocalDate.of(2022, 5, 5));
+        course.setEndDate(LocalDate.of(2022, 5, 10));
+        employeeBeforeAct = courseService.addCourse(employeeBeforeAct, course);
+
+        assertEquals(50, employeeBeforeAct.getCourseHoursSum());
+
+        employeeBeforeAct = employeeService.setCategory(employeeBeforeAct, EmployeeCategory.HIGHEST, "Kat n. 430", LocalDate.of(2025, 5,5));
+
+        assertEquals(0, employeeBeforeAct.getCourseHoursSum());
     }
 }

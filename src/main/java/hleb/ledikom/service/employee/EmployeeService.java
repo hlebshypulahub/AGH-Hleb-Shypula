@@ -4,6 +4,8 @@ import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.employee.EmployeeCategory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 import static java.time.temporal.ChronoUnit.MONTHS;
 
 @Service
@@ -39,9 +41,9 @@ public class EmployeeService {
                 employee.setCategoryAssignmentDeadlineDate(employee.getCategoryAssignmentDeadlineDate().plusMonths(employee.getCertificationExemptionReason().getMonthsDuration()));
                 employee.setDocsSubmitDeadlineDate(employee.getCategoryAssignmentDeadlineDate().minusMonths(Employee.DOCS_SUBMIT_MONTHS));
                 break;
-            case PREGNANCY:
-                employee.setExemptioned(true);
-                break;
+//            case PREGNANCY:
+//                employee.setExemptioned(true);
+//                break;
             case CONSCRIPTION:
             case MATERNITY_LEAVE:
                 if (employee.getExemptionEndDate() == null) {
@@ -66,6 +68,16 @@ public class EmployeeService {
                 }
                 break;
         }
+    }
 
+    public Employee setCategory(Employee employee, EmployeeCategory employeeCategory, String categoryNumber, LocalDate categoryAssignmentDate) {
+        employee.setEmployeeCategory(employeeCategory);
+        employee.setCategoryNumber(categoryNumber);
+        employee.setCategoryAssignmentDate(categoryAssignmentDate);
+        employee.setCourseHoursSum(0);
+
+        employee = process(employee);
+
+        return employee;
     }
 }
