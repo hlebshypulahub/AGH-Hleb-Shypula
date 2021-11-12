@@ -1,4 +1,4 @@
-package hleb.ledikom.controller;
+package hleb.ledikom.controller.user;
 
 import hleb.ledikom.service.user.PrincipleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
-public class TestSecurityController {
+@RequestMapping("/api/user")
+public class UserController {
 
     @Autowired
     PrincipleService principleService;
