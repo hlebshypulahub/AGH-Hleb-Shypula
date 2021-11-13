@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
+
+import { history } from "../helpers/history";
 
 import { login } from "../actions/auth";
 
@@ -10,7 +12,6 @@ import "./LoginForm.scss";
 export const LoginForm = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
 
     const { isLoggedIn } = useSelector((state) => state.auth);
     const { message } = useSelector((state) => state.message);
@@ -27,34 +28,41 @@ export const LoginForm = (props) => {
         setPassword(password);
     };
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+    const handleLogin = useCallback(
+        (e) => {
+            e.preventDefault();
 
-        setLoading(true);
+            dispatch(login(username, password));
+        },
+        [dispatch, username, password]
+    );
 
-        // form.current.validateAll();
-
-        // if (checkBtn.current.context._errors.length === 0) {
-        dispatch(login(username, password))
-            .then(() => {
-                props.history.push("/profile");
-                window.location.reload();
-            })
-            .catch(() => {
-                setLoading(false);
-            });
-        // } else {
-        //     setLoading(false);
-        // }
-    };
+    useEffect(() => {
+        const listener = (event) => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                event.preventDefault();
+                handleLogin(event);
+            }
+        };
+        document.addEventListener("keydown", listener);
+        return () => {
+            document.removeEventListener("keydown", listener);
+        };
+    }, [dispatch, username, password, handleLogin]);
 
     if (isLoggedIn) {
-        return <Redirect to="/profile" />;
+        return <Redirect to="/home" />;
     }
 
     return (
         <div className="LoginForm">
             <h3 className="label">A U T O R Y Z A C J A</h3>
+
+            {message && (
+                <div className="error">
+                    <span>{message}</span>
+                </div>
+            )}
 
             <TextField
                 className="input"
@@ -79,12 +87,6 @@ export const LoginForm = (props) => {
             >
                 Zaloguj
             </Button>
-
-            {message && (
-                <div>
-                    <h3>{message}</h3>
-                </div>
-            )}
         </div>
     );
 };

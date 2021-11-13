@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Router, Route, Switch, Link } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import { history } from "./helpers/history";
@@ -9,8 +9,11 @@ import { clearMessage } from "./actions/message";
 import Profile from "./pages/Profile";
 import "./App.css";
 
+import { Redirect } from "react-router-dom";
+
 function App() {
     const { user: currentUser } = useSelector((state) => state.auth);
+    const { isLoggedIn } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,8 +23,8 @@ function App() {
     }, [dispatch]);
 
     return (
-        <div className="App">
-            <Router>
+        <Router history={history}>
+            <div className="App">
                 {/* {currentUser ? (
                     <div>
                         <li>
@@ -40,12 +43,12 @@ function App() {
                 )} */}
 
                 <Switch>
-                    <Route path="/" exact component={HomePage}></Route>
-                    <Route path="/login" component={LoginPage}></Route>
-                    <Route path="/profile" component={Profile}></Route>
+                    <Route exact path={["/", "/home"]} component={HomePage} />
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/profile" component={Profile} />
                 </Switch>
-            </Router>
-        </div>
+            </div>
+        </Router>
     );
 }
 

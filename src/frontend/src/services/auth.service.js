@@ -8,13 +8,18 @@ const login = (username, password) => {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
-    }).then((response) =>
-        response.json().then((data) => {
-            if (data.accessToken) {
-                localStorage.setItem("user", JSON.stringify(data));
-            }
-        })
-    );
+    }).then((response) => {
+        if (response.ok) {
+            response.json().then((data) => {
+                console.log(data.accessToken);
+                if (data.accessToken) {
+                    localStorage.setItem("user", JSON.stringify(data));
+                }
+            });
+        } else {
+            throw new Error(response.status);
+        }
+    });
 };
 
 const logout = () => {

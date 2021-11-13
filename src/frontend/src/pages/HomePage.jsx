@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-class HomePage extends Component {
-    render() {
-        return (
-            <div className="HomePage">
-                <Redirect to="/login" />
-            </div>
-        );
-    }
-}
+const HomePage = (props) => {
+    return (
+        <div className="HomePage">
+            <h3>HOME</h3>
+        </div>
+    );
+};
 
 export default HomePage;

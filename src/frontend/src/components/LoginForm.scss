@@ -11,6 +11,7 @@
 
     .label {
         font-family: "Quicksand", sans-serif;
+        font-size: 20px;
         text-align: center;
     }
 
@@ -23,5 +24,19 @@
         margin-top: 10px;
         margin-left: auto;
         margin-right: 10px;
+    }
+
+    .error {
+        text-align: center;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        margin-bottom: 20px;
+        background-color: #F6D9D8;
+        
+        span {
+            font-family: "Quicksand", sans-serif;
+            font-weight: bold;
+            color: #9A211E;
+        }
     }
 }

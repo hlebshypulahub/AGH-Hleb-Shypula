@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
@@ -12,11 +12,9 @@ const Profile = () => {
     return (
         <div className="container">
             <header className="jumbotron">
-                <h3>
-                    <strong>{currentUser.username}</strong> Profile
-                </h3>
+                <h3>{/* <strong>{currentUser.username}</strong>*/} Profile</h3>
             </header>
-            <p>
+            {/* <p>
                 <strong>Token:</strong>{" "}
                 {currentUser.accessToken.substring(0, 20)} ...{" "}
                 {currentUser.accessToken.substr(
@@ -35,7 +33,7 @@ const Profile = () => {
                     currentUser.roles.map((role, index) => (
                         <li key={index}>{role}</li>
                     ))}
-            </ul>
+            </ul> */}
         </div>
     );
 };
