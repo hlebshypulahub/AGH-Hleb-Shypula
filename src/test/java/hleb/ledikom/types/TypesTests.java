@@ -1,4 +1,4 @@
-package hleb.ledikom;
+package hleb.ledikom.types;
 
 import hleb.ledikom.model.employee.CertificationExemptionReason;
 import hleb.ledikom.model.employee.EmployeeCategory;

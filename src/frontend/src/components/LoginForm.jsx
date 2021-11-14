@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
-
-import { history } from "../helpers/history";
+import { Navigate } from "react-router-dom";
 
 import { login } from "../actions/auth";
 
@@ -32,7 +30,9 @@ export const LoginForm = (props) => {
         (e) => {
             e.preventDefault();
 
-            dispatch(login(username, password));
+            if (!(username === "" || password === "")) {
+                dispatch(login(username, password));
+            }
         },
         [dispatch, username, password]
     );
@@ -51,42 +51,42 @@ export const LoginForm = (props) => {
     }, [dispatch, username, password, handleLogin]);
 
     if (isLoggedIn) {
-        return <Redirect to="/home" />;
+        return <Navigate to="/profile" />;
     }
 
     return (
         <div className="LoginForm">
             <h3 className="label">A U T O R Y Z A C J A</h3>
-
             {message && (
                 <div className="error">
                     <span>{message}</span>
                 </div>
             )}
-
-            <TextField
-                className="input"
-                id="outlined-basic"
-                label="Nazwa użytkownika"
-                variant="outlined"
-                onChange={onChangeUsername}
-            />
-            <TextField
-                className="input"
-                id="outlined-password-input"
-                label="Hasło"
-                type="password"
-                autoComplete="current-password"
-                onChange={onChangePassword}
-            />
-            <Button
-                className="button"
-                variant="contained"
-                color="success"
-                onClick={handleLogin}
-            >
-                Zaloguj
-            </Button>
+            <form className="form" onSubmit={handleLogin}>
+                <TextField
+                    className="input"
+                    id="outlined-basic"
+                    label="Nazwa użytkownika"
+                    variant="outlined"
+                    onChange={onChangeUsername}
+                />
+                <TextField
+                    className="input"
+                    id="outlined-password-input"
+                    label="Hasło"
+                    type="password"
+                    autoComplete="current-password"
+                    onChange={onChangePassword}
+                />
+                <Button
+                    type="submit"
+                    className="button"
+                    variant="contained"
+                    color="success"
+                >
+                    Zaloguj
+                </Button>
+            </form>
         </div>
     );
 };

@@ -1,6 +1,3 @@
-import { Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-
 const HomePage = (props) => {
     return (
         <div className="HomePage">

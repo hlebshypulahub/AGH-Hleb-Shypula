@@ -10,11 +10,12 @@ const login = (username, password) => {
         },
     }).then((response) => {
         if (response.ok) {
-            response.json().then((data) => {
-                console.log(data.accessToken);
+            return response.json().then((data) => {
                 if (data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(data));
                 }
+
+                return data;
             });
         } else {
             throw new Error(response.status);

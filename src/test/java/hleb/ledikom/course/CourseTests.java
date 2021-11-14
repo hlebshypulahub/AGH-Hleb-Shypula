@@ -1,4 +1,4 @@
-package hleb.ledikom;
+package hleb.ledikom.course;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

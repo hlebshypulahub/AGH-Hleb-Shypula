@@ -1,4 +1,4 @@
-package hleb.ledikom;
+package hleb.ledikom.course;
 
 import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;

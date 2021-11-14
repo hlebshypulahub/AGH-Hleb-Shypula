@@ -1,4 +1,4 @@
-package hleb.ledikom;
+package hleb.ledikom.employee;
 
 import hleb.ledikom.model.employee.EmployeeCategory;
 import hleb.ledikom.model.employee.Employee;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-public class DAOIntegrationTests {
+public class EmployeeRepositoryTests {
 
     @Autowired
     private TestEntityManager entityManager;
