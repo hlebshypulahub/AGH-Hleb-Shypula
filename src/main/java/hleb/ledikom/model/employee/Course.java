@@ -1,8 +1,15 @@
 package hleb.ledikom.model.employee;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class Course {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    long id;
 
     private String name;
     private String description;
@@ -10,6 +17,8 @@ public class Course {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public Course() {

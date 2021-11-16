@@ -7,6 +7,7 @@ import { history } from "./helpers/history";
 import { clearMessage } from "./actions/message";
 import Profile from "./pages/Profile";
 import "./App.css";
+import { Dashboard } from "./pages/Dashboard";
 
 
 function App() {
@@ -20,14 +21,7 @@ function App() {
 
     return (
         <div className="App">
-            <Router history={history}>
-                <Routes>
-                    <Route exact path="/" element={<HomePage />} />
-                    <Route path="/home" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/profile" element={<Profile />} />
-                </Routes>
-            </Router>
+            <Dashboard/>
         </div>
     );
 }

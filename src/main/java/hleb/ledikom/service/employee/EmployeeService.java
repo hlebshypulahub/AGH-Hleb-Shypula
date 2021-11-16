@@ -1,7 +1,7 @@
 package hleb.ledikom.service.employee;
 
 import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Category;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ public class EmployeeService {
     }
 
     private void processCategoryDates(Employee employee) {
-        if (employee.getEmployeeCategory() != EmployeeCategory.NONE && employee.getCategoryAssignmentDate() != null) {
+        if (employee.getCategory() != Category.NONE && employee.getCategoryAssignmentDate() != null) {
             employee.setCategoryPossiblePromotionDate(employee.getCategoryAssignmentDate().plusYears(Employee.CATEGORY_POSSIBLE_PROMOTION_YEARS));
 
             if (employee.getCategoryAssignmentDate().isBefore(Employee.ACT_ENTRY_INTO_FORCE_DATE)) {
@@ -96,8 +96,8 @@ public class EmployeeService {
         employee.setDocsSubmitDeadlineDate(employee.getCategoryAssignmentDeadlineDate().minusMonths(Employee.DOCS_SUBMIT_MONTHS));
     }
 
-    public Employee setCategory(Employee employee, EmployeeCategory employeeCategory, String categoryNumber, LocalDate categoryAssignmentDate) {
-        employee.setEmployeeCategory(employeeCategory);
+    public Employee setCategory(Employee employee, Category category, String categoryNumber, LocalDate categoryAssignmentDate) {
+        employee.setCategory(category);
         employee.setCategoryNumber(categoryNumber);
         employee.setCategoryAssignmentDate(categoryAssignmentDate);
         employee.setCourseHoursSum(0);

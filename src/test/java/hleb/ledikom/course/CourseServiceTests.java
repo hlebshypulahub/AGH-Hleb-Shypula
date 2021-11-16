@@ -2,7 +2,7 @@ package hleb.ledikom.course;
 
 import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Category;
 import hleb.ledikom.service.course.CourseService;
 import hleb.ledikom.service.employee.EmployeeService;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +29,7 @@ public class CourseServiceTests {
     @BeforeEach
     public void before() {
         employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.FIRST);
+        employee.setCategory(Category.FIRST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
 
         employee.setCourses(new HashSet<>());

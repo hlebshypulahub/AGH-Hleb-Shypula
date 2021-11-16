@@ -31,7 +31,7 @@ public class EmployeeServiceTests {
     public void before() {
         /// Employee with category assigned before act
         employeeBeforeAct = new Employee();
-        employeeBeforeAct.setEmployeeCategory(EmployeeCategory.FIRST);
+        employeeBeforeAct.setCategory(Category.FIRST);
         employeeBeforeAct.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
 
         employeeBeforeAct.setCourses(new HashSet<>());
@@ -40,7 +40,7 @@ public class EmployeeServiceTests {
 
         /// Employee with category assigned after act
         employeeAfterAct = new Employee();
-        employeeAfterAct.setEmployeeCategory(EmployeeCategory.HIGHEST);
+        employeeAfterAct.setCategory(Category.HIGHEST);
         employeeAfterAct.setCategoryAssignmentDate(LocalDate.of(2022, 3, 15));
         employeeAfterAct = employeeService.process(employeeAfterAct);
 
@@ -59,7 +59,7 @@ public class EmployeeServiceTests {
 
     /// Test 1
     @Test
-    public void testEmployeeCategoryAssignmentDeadlineDateCategoryAssignedBeforeAct() {
+    public void testCategoryAssignmentDeadlineDateCategoryAssignedBeforeAct() {
         assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
     }
 
@@ -85,7 +85,7 @@ public class EmployeeServiceTests {
 
     /// Test 3
     @Test
-    public void testEmployeeCategoryAssignmentDeadlineDateCategoryAssignedAfterAct() {
+    public void testCategoryAssignmentDeadlineDateCategoryAssignedAfterAct() {
         assertEquals(employeeAfterAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2027, 3, 15));
     }
 
@@ -113,7 +113,7 @@ public class EmployeeServiceTests {
     public void testEmployeeDocsSubmitDeadlineDateCategoryAssignedSameDayAsAct() {
         LocalDate date = Employee.ACT_ENTRY_INTO_FORCE_DATE;
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.HIGHEST);
+        employee.setCategory(Category.HIGHEST);
         employee.setCategoryAssignmentDate(date);
         employee = employeeService.process(employee);
         assertEquals(employee.getDocsSubmitDeadlineDate(), LocalDate.of(2026, 4, 23));
@@ -124,7 +124,7 @@ public class EmployeeServiceTests {
         LocalDate date = Employee.ACT_ENTRY_INTO_FORCE_DATE;
         notificationTerm.setDays((int) Math.abs(DAYS.between(date.plusYears(Employee.CATEGORY_VERIFICATION_YEARS).minusMonths(Employee.DOCS_SUBMIT_MONTHS), date.plusYears(4))));
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.HIGHEST);
+        employee.setCategory(Category.HIGHEST);
         employee.setCategoryAssignmentDate(date);
         employee = employeeService.process(employee);
         assertEquals(Math.abs(DAYS.between(employee.getDocsSubmitDeadlineDate(), LocalDate.of(2025, 7, 23))), notificationTerm.getDays());
@@ -150,7 +150,7 @@ public class EmployeeServiceTests {
 
         assertEquals(50, employeeBeforeAct.getCourseHoursSum());
 
-        employeeBeforeAct = employeeService.setCategory(employeeBeforeAct, EmployeeCategory.HIGHEST, "Kat n. 430", LocalDate.of(2025, 5,5));
+        employeeBeforeAct = employeeService.setCategory(employeeBeforeAct, Category.HIGHEST, "Kat n. 430", LocalDate.of(2025, 5,5));
 
         assertEquals(0, employeeBeforeAct.getCourseHoursSum());
     }

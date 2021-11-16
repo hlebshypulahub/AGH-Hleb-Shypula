@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import hleb.ledikom.model.employee.CertificationExemptionReason;
 import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Category;
 import hleb.ledikom.model.employee.NotificationTerm;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +31,7 @@ public class EmployeeTests {
     @BeforeEach
     public void before() {
         employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.FIRST);
+        employee.setCategory(Category.FIRST);
         employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
         employee.setActive(true);
 
@@ -51,13 +51,13 @@ public class EmployeeTests {
 
     @Test
     public void testEmployeeCategory() {
-        assertEquals(employee.getEmployeeCategory().toString(), "Pierwsza");
+        assertEquals(employee.getCategory().toString(), "Pierwsza");
     }
 
     @Test
     public void testEmployeeCategoryNotExistence() {
-        Employee employee2 = new Employee(EmployeeCategory.NONE);
-        assertEquals(employee2.getEmployeeCategory().toString(), "Brak");
+        Employee employee2 = new Employee(Category.NONE);
+        assertEquals(employee2.getCategory().toString(), "Brak");
     }
 
     static class DateTest {
@@ -84,7 +84,7 @@ public class EmployeeTests {
     @Test
     public void testEmployeeDefaultCategory() {
         employee = new Employee();
-        assertNull(employee.getEmployeeCategory());
+        assertNull(employee.getCategory());
     }
 
     @Test

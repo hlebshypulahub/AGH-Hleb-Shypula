@@ -1,7 +1,7 @@
 package hleb.ledikom.types;
 
 import hleb.ledikom.model.employee.CertificationExemptionReason;
-import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,7 +12,7 @@ public class TypesTests {
 
     @Test
     public void testEmployeeCategoryToString() {
-        assertEquals(EmployeeCategory.SECOND.toString(), "Druga");
+        assertEquals(Category.SECOND.toString(), "Druga");
     }
 
     @Test

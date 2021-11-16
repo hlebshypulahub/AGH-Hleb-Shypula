@@ -2,7 +2,7 @@ package hleb.ledikom.employee.service;
 
 import hleb.ledikom.model.employee.CertificationExemptionReason;
 import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.EmployeeCategory;
+import hleb.ledikom.model.employee.Category;
 import hleb.ledikom.model.employee.NotificationTerm;
 import hleb.ledikom.service.course.CourseService;
 import hleb.ledikom.service.employee.EmployeeService;
@@ -33,7 +33,7 @@ public class EmployeeExemptionServiceTests {
     public void before() {
         /// Employee with category assigned before act
         employeeBeforeAct = new Employee();
-        employeeBeforeAct.setEmployeeCategory(EmployeeCategory.FIRST);
+        employeeBeforeAct.setCategory(Category.FIRST);
         employeeBeforeAct.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
 
         employeeBeforeAct.setCourses(new HashSet<>());
@@ -42,7 +42,7 @@ public class EmployeeExemptionServiceTests {
 
         /// Employee with category assigned after act
         employeeAfterAct = new Employee();
-        employeeAfterAct.setEmployeeCategory(EmployeeCategory.HIGHEST);
+        employeeAfterAct.setCategory(Category.HIGHEST);
         employeeAfterAct.setCategoryAssignmentDate(LocalDate.of(2022, 3, 15));
         employeeAfterAct = employeeService.process(employeeAfterAct);
 
@@ -209,7 +209,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeExemptionEndDateAfterNowPregnancy() {
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.NONE);
+        employee.setCategory(Category.NONE);
         employee.setCategoryAssignmentDate(LocalDate.now().minusMonths(50));
         employee.setCategoryAssignmentDeadlineDate(LocalDate.now().plusMonths(10));
 
@@ -227,7 +227,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeExemptionEndDateBeforeNowPregnancy() {
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.NONE);
+        employee.setCategory(Category.NONE);
         employee.setCategoryAssignmentDate(LocalDate.now().minusMonths(50));
         employee.setCategoryAssignmentDeadlineDate(LocalDate.now().plusMonths(10));
 
@@ -245,7 +245,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeExemptionEndDateAfterNowConscription() {
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.NONE);
+        employee.setCategory(Category.NONE);
         employee.setCategoryAssignmentDate(LocalDate.now().minusMonths(50));
         employee.setCategoryAssignmentDeadlineDate(LocalDate.now().plusMonths(10));
 
@@ -263,7 +263,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeExemptionEndDateBeforeNowConscription() {
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.NONE);
+        employee.setCategory(Category.NONE);
         employee.setCategoryAssignmentDate(LocalDate.now().minusMonths(50));
         employee.setCategoryAssignmentDeadlineDate(LocalDate.now().plusMonths(10));
 
@@ -281,7 +281,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeExemptionEndDateBeforeNowAndLessMonthsConscription() {
         Employee employee = new Employee();
-        employee.setEmployeeCategory(EmployeeCategory.NONE);
+        employee.setCategory(Category.NONE);
         employee.setCategoryAssignmentDate(LocalDate.now().minusMonths(50));
         employee.setCategoryAssignmentDeadlineDate(LocalDate.now().plusMonths(10));
 

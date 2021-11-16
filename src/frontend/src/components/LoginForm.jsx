@@ -50,9 +50,9 @@ export const LoginForm = (props) => {
         };
     }, [dispatch, username, password, handleLogin]);
 
-    if (isLoggedIn) {
-        return <Navigate to="/profile" />;
-    }
+    // if (isLoggedIn) {
+    //     return <Navigate to="/profile" />;
+    // }
 
     return (
         <div className="LoginForm">

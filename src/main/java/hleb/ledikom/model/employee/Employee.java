@@ -1,9 +1,10 @@
 package hleb.ledikom.model.employee;
 
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Entity
 public class Employee {
     @Transient
     public static final LocalDate ACT_ENTRY_INTO_FORCE_DATE = LocalDate.of(2021, 7, 23);
@@ -14,16 +15,22 @@ public class Employee {
     @Transient
     public static final int DOCS_SUBMIT_MONTHS = 3;
 
-    private String firstName;
-    private String lastName;
-    private String middleName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    long id;
+
+    /// Id from accounting app
+    long foreignId;
+
+    private String fullName;
     private LocalDate hiringDate;
     private String jobFacility;
     private String position;
 
     private String qualification;
 
-    private EmployeeCategory employeeCategory;
+    private Category category;
     private String categoryNumber;
     private LocalDate categoryAssignmentDate;
     private LocalDate categoryAssignmentDeadlineDate;
@@ -31,6 +38,8 @@ public class Employee {
     private LocalDate categoryPossiblePromotionDate;
 
     private int courseHoursSum;
+
+    @OneToMany(mappedBy="employee")
     private Set<Course> courses;
 
     private CertificationExemptionReason certificationExemptionReason;
@@ -54,14 +63,14 @@ public class Employee {
     }
 
     public Employee(Employee other) {
-        this.firstName = other.firstName;
-        this.lastName = other.lastName;
-        this.middleName = other.middleName;
+        this.id = other.id;
+        this.foreignId = other.foreignId;
+        this.fullName = other.fullName;
         this.hiringDate = other.hiringDate;
         this.jobFacility = other.jobFacility;
         this.position = other.position;
         this.qualification = other.qualification;
-        this.employeeCategory = other.employeeCategory;
+        this.category = other.category;
         this.categoryNumber = other.categoryNumber;
         this.categoryAssignmentDate = other.categoryAssignmentDate;
         this.categoryAssignmentDeadlineDate = other.categoryAssignmentDeadlineDate;
@@ -82,7 +91,7 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "employeeCategory=" + employeeCategory +
+                "employeeCategory=" + category +
                 ", categoryAssignmentDate=" + categoryAssignmentDate +
                 ", categoryAssignmentDeadlineDate=" + categoryAssignmentDeadlineDate +
                 ", docsSubmitDeadlineDate=" + docsSubmitDeadlineDate +
@@ -95,20 +104,36 @@ public class Employee {
                 '}';
     }
 
-    public Employee(EmployeeCategory employeeCategory) {
-        this.employeeCategory = employeeCategory;
+    public Employee(Category category) {
+        this.category = category;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getForeignId() {
+        return foreignId;
+    }
+
+    public void setForeignId(long foreignId) {
+        this.foreignId = foreignId;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setCategoryAssignmentDate(LocalDate categoryAssignmentDate) {
         this.categoryAssignmentDate = categoryAssignmentDate;
-    }
-
-    public EmployeeCategory getEmployeeCategory() {
-        return employeeCategory;
-    }
-
-    public void setEmployeeCategory(EmployeeCategory employeeCategory) {
-        this.employeeCategory = employeeCategory;
     }
 
     public LocalDate getCategoryAssignmentDate() {
@@ -179,28 +204,12 @@ public class Employee {
         this.exemptioned = exemptioned;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public LocalDate getHiringDate() {

@@ -1,6 +1,6 @@
 package hleb.ledikom.model.employee;
 
-public enum EmployeeCategory {
+public enum Category {
 
     HIGHEST("Wyższa"),
     FIRST("Pierwsza"),
@@ -9,7 +9,7 @@ public enum EmployeeCategory {
 
     private final String label;
 
-    EmployeeCategory(String label) {
+    Category(String label) {
         this.label = label;
     }
 
