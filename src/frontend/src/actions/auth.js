@@ -5,8 +5,6 @@ import AuthService from "../services/auth.service";
 export const login = (username, password) => (dispatch) => {
     return AuthService.login(username, password)
         .then((data) => {
-            console.log(1);
-            console.log(data);
             if (data.accessToken) {
                 localStorage.setItem("user", JSON.stringify(data));
             }

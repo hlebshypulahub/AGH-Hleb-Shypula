@@ -1,8 +1,8 @@
-import React from "react";
+import EmployeesTable from "../components/EmployeesTable";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Profile = () => {
+const EmployeesPage = (props) => {
     const { user: currentUser } = useSelector((state) => state.auth);
 
     if (!currentUser) {
@@ -10,10 +10,10 @@ const Profile = () => {
     }
 
     return (
-        <div>
-                <h3>Profile</h3>
+        <div className="EmployeesPage">
+            <EmployeesTable />
         </div>
     );
 };
 
-export default Profile;
+export default EmployeesPage;

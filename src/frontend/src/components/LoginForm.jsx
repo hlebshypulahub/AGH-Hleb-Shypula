@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import { login } from "../actions/auth";
 
@@ -50,9 +50,9 @@ const LoginForm = (props) => {
         };
     }, [dispatch, username, password, handleLogin]);
 
-    // if (isLoggedIn) {
-    //     return <Navigate to="/profile" />;
-    // }
+    if (isLoggedIn) {
+        return <Redirect to="/profile" />;
+    }
 
     return (
         <div className="LoginForm">
