@@ -2,7 +2,7 @@ import LoginForm from "../components/LoginForm";
 import "./LoginPage.scss";
 import staffImg from "../img/staff_bg.jpg";
 
-export const LoginPage = (props) => {
+const LoginPage = (props) => {
     return (
         <div className="LoginPage">
             {/* <header>

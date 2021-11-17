@@ -1,7 +1,7 @@
-const API_BASE_URL = "http://localhost:8080/api/auth/";
+const API_BASE_URL = "http://localhost:8080/api/auth";
 
 const login = (username, password) => {
-    return fetch(API_BASE_URL + "signin", {
+    return fetch(API_BASE_URL + "/signin", {
         method: "POST",
         body: JSON.stringify({ username, password }),
         headers: {

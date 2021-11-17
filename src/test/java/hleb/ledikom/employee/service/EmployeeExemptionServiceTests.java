@@ -5,7 +5,7 @@ import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.employee.Category;
 import hleb.ledikom.model.employee.NotificationTerm;
 import hleb.ledikom.service.course.CourseService;
-import hleb.ledikom.service.employee.EmployeeService;
+import hleb.ledikom.service.employee.EmployeeLogicService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EmployeeExemptionServiceTests {
 
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeLogicService employeeLogicService;
     @Autowired
     private CourseService courseService;
 
@@ -38,15 +38,15 @@ public class EmployeeExemptionServiceTests {
 
         employeeBeforeAct.setCourses(new HashSet<>());
 
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
 
         /// Employee with category assigned after act
         employeeAfterAct = new Employee();
         employeeAfterAct.setCategory(Category.HIGHEST);
         employeeAfterAct.setCategoryAssignmentDate(LocalDate.of(2022, 3, 15));
-        employeeAfterAct = employeeService.process(employeeAfterAct);
+        employeeAfterAct = employeeLogicService.process(employeeAfterAct);
 
-        employeeAfterAct = employeeService.process(employeeAfterAct);
+        employeeAfterAct = employeeLogicService.process(employeeAfterAct);
 
         /// Notification term
         notificationTerm = new NotificationTerm();
@@ -63,7 +63,7 @@ public class EmployeeExemptionServiceTests {
     @Test
     public void testEmployeeLessThanYearWorkExemption() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.LESS_THAN_YEAR_WORK);
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2027, 7, 23), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertEquals(LocalDate.of(2027, 4, 23), employeeBeforeAct.getDocsSubmitDeadlineDate());
     }
@@ -73,7 +73,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeePregnancyExemption() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.PREGNANCY);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -83,7 +83,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeeConscriptionExemptionStart() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.CONSCRIPTION);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2026, 7, 23), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -104,7 +104,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeeTreatmentExemptionStart() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.TREATMENT);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2026, 1, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2026, 7, 23), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -136,7 +136,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeeBusinessTripExemptionStart() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.BUSINESS_TRIP);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2026, 1, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2026, 7, 23), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -168,7 +168,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeeMaternityLeaveExemptionStart() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.MATERNITY_LEAVE);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(LocalDate.of(2026, 7, 23), employeeBeforeAct.getCategoryAssignmentDeadlineDate());
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -189,7 +189,7 @@ public class EmployeeExemptionServiceTests {
     public void testEmployeeStudiesExemption() {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.STUDIES);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -200,7 +200,7 @@ public class EmployeeExemptionServiceTests {
         employeeBeforeAct.setCertificationExemptionReason(CertificationExemptionReason.STUDIES);
         employeeBeforeAct.setExemptionStartDate(LocalDate.of(2025, 5, 5));
         employeeBeforeAct.setExemptionEndDate(LocalDate.of(2026, 10, 5));
-        employeeBeforeAct = employeeService.process(employeeBeforeAct);
+        employeeBeforeAct = employeeLogicService.process(employeeBeforeAct);
         assertEquals(employeeBeforeAct.getCategoryAssignmentDeadlineDate(), LocalDate.of(2026, 7, 23));
         assertTrue(employeeBeforeAct.isExemptioned());
     }
@@ -217,7 +217,7 @@ public class EmployeeExemptionServiceTests {
         employee.setExemptionStartDate(LocalDate.now().minusMonths(1));
         employee.setExemptionEndDate(LocalDate.now().plusMonths(1));
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
 
         assertEquals(employee.getCategoryAssignmentDeadlineDate(), LocalDate.now().plusMonths(10));
         assertTrue(employee.isExemptioned());
@@ -235,7 +235,7 @@ public class EmployeeExemptionServiceTests {
         employee.setExemptionStartDate(LocalDate.now().minusMonths(3));
         employee.setExemptionEndDate(LocalDate.now().minusMonths(1));
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
 
         assertEquals(employee.getCategoryAssignmentDeadlineDate(), LocalDate.now().plusMonths(10));
         assertFalse(employee.isExemptioned());
@@ -253,7 +253,7 @@ public class EmployeeExemptionServiceTests {
         employee.setExemptionStartDate(LocalDate.now().minusMonths(1));
         employee.setExemptionEndDate(LocalDate.now().plusMonths(1));
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
 
         assertEquals(employee.getCategoryAssignmentDeadlineDate(), LocalDate.now().plusMonths(10));
         assertTrue(employee.isExemptioned());
@@ -271,7 +271,7 @@ public class EmployeeExemptionServiceTests {
         employee.setExemptionStartDate(LocalDate.now().minusMonths(5));
         employee.setExemptionEndDate(LocalDate.now().minusMonths(4));
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
 
         assertEquals(employee.getCategoryAssignmentDeadlineDate(), LocalDate.now().plusMonths(10));
         assertFalse(employee.isExemptioned());
@@ -289,7 +289,7 @@ public class EmployeeExemptionServiceTests {
         employee.setExemptionStartDate(LocalDate.now().minusMonths(2));
         employee.setExemptionEndDate(LocalDate.now().minusMonths(1));
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
 
         assertEquals(employee.getCategoryAssignmentDeadlineDate(), LocalDate.now().minusMonths(1).plusMonths(employee.getCertificationExemptionReason().getMonthsOfExemption()));
         assertFalse(employee.isExemptioned());

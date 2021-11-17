@@ -7,7 +7,7 @@ import { login } from "../actions/auth";
 import { TextField, Button } from "@mui/material";
 import "./LoginForm.scss";
 
-export const LoginForm = (props) => {
+const LoginForm = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 

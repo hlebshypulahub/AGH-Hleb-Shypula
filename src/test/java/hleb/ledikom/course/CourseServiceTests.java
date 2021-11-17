@@ -4,7 +4,7 @@ import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.employee.Category;
 import hleb.ledikom.service.course.CourseService;
-import hleb.ledikom.service.employee.EmployeeService;
+import hleb.ledikom.service.employee.EmployeeLogicService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CourseServiceTests {
 
     @Autowired
-    private EmployeeService employeeService;
+    private EmployeeLogicService employeeLogicService;
     @Autowired
     private CourseService courseService;
 
@@ -34,7 +34,7 @@ public class CourseServiceTests {
 
         employee.setCourses(new HashSet<>());
 
-        employee = employeeService.process(employee);
+        employee = employeeLogicService.process(employee);
     }
 
     @AfterEach

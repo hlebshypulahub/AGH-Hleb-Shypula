@@ -5,7 +5,6 @@ import hleb.ledikom.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,19 +23,11 @@ public class EmployeeReader {
 
     Logger logger = LoggerFactory.getLogger(EmployeeReader.class);
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 21 * * *")
     /// "0 0 6 * * *" every day 6 a.m.
+    /// "0 * * * * *" every minute
     public void readAndFillData() throws FileNotFoundException, URISyntaxException {
-//        URL resource = EmployeeReader.class.getResource("/employee_data.csv");
-//
-//        if (resource == null) {
-//            throw new FileNotFoundException("Не найден файл выгрузки сотрудников");
-//        }
-
-        ClassPathResource resource = new ClassPathResource("C:\\Users\\hlebs\\Desktop\\Ledikom\\employee_data.csv");
-
-        String filePath = "C:" + File.separator +
-                "Users" + File.separator + "hlebs" + File.separator + "Desktop" + File.separator + "Ledikom" + File.separator + "employee_data.csv";
+        String filePath = "C:" + File.separator + "Users" + File.separator + "hlebs" + File.separator + "Desktop" + File.separator + "Ledikom" + File.separator + "employee_data.csv";
         Path path = Paths.get(filePath);
 
         try (BufferedReader br = new BufferedReader(new FileReader(path.toFile()))) {

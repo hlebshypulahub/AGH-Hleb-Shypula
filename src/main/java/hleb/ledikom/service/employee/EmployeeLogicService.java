@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.MONTHS;
 
 @Service
-public class EmployeeService {
+public class EmployeeLogicService {
 
     public Employee process(Employee employee) {
         processCategoryDates(employee);
