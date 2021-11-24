@@ -5,7 +5,6 @@ import hleb.ledikom.repository.EmployeeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -23,7 +22,7 @@ public class EmployeeReader {
 
     Logger logger = LoggerFactory.getLogger(EmployeeReader.class);
 
-    @Scheduled(cron = "0 0 21 * * *")
+//    @Scheduled(cron = "0 0 21 * * *")
     /// "0 0 6 * * *" every day 6 a.m.
     /// "0 * * * * *" every minute
     public void readAndFillData() throws FileNotFoundException, URISyntaxException {

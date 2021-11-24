@@ -23,13 +23,14 @@ public class Employee {
     /// Id from accounting app
     long foreignId;
 
+    /// Main info
     private String fullName;
     private LocalDate hiringDate;
     private String jobFacility;
     private String position;
-
     private String qualification;
 
+    /// Category
     private Category category;
     private String categoryNumber;
     private LocalDate categoryAssignmentDate;
@@ -37,18 +38,23 @@ public class Employee {
     private LocalDate docsSubmitDeadlineDate;
     private LocalDate categoryPossiblePromotionDate;
 
+    /// Course hours sum
     private int courseHoursSum;
 
+    /// Courses
     @OneToMany(mappedBy="employee")
     private Set<Course> courses;
 
+    /// Exemption
     private CertificationExemptionReason certificationExemptionReason;
     private LocalDate exemptionStartDate;
     private LocalDate exemptionEndDate;
     private boolean exemptioned;
 
+    /// Active / inactive
     private boolean active;
 
+    /// Education
     private Education education;
     private String eduName;
     private LocalDate eduGraduationDate;
