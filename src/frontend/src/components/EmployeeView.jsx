@@ -74,31 +74,35 @@ const EmployeeView = (props) => {
                     >
                         <span className="header-label">Kategoria</span>
                         <div>
-                            <span className="label-text">Kwalifikacja:</span>
+                            <span className="label-text-large">
+                                Kwalifikacja:
+                            </span>
                             <span className="value-text">
                                 {employee.qualification}
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">Kategoria:</span>
+                            <span className="label-text-large">Kategoria:</span>
                             <span className="value-text">
                                 {employee.category}
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">Numer:</span>
+                            <span className="label-text-large">Numer:</span>
                             <span className="value-text">
                                 {employee.categoryNumber}
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">Data nadania:</span>
+                            <span className="label-text-large">
+                                Data nadania:
+                            </span>
                             <span className="value-text">
                                 {formatter(employee.categoryAssignmentDate)}
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">
+                            <span className="label-text-large">
                                 Termin potwierdzenia:
                             </span>
                             <span className="value-text">
@@ -108,7 +112,7 @@ const EmployeeView = (props) => {
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">
+                            <span className="label-text-large">
                                 Termin dostarczenia dokumentów:
                             </span>
                             <span className="value-text">
@@ -116,7 +120,7 @@ const EmployeeView = (props) => {
                             </span>
                         </div>
                         <div>
-                            <span className="label-text">
+                            <span className="label-text-large">
                                 Możliwe nadanie kolejnej kategorii:
                             </span>
                             <span className="value-text">
