@@ -48,7 +48,7 @@ const LoginForm = (props) => {
         return () => {
             document.removeEventListener("keydown", listener);
         };
-    }, [dispatch, username, password, handleLogin]);
+    }, [handleLogin]);
 
     if (isLoggedIn) {
         return <Redirect to="/profile" />;

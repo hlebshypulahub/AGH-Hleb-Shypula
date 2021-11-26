@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
 
+@import "../css/colors.css";
+
 .LoginForm {
-    background-color: #f9fff5;
+    background-color: var(--banana);
     box-shadow: 0 0 3em #d4d4d4;
     border-radius: 8px;
     width: 300px;
@@ -41,7 +43,7 @@
         span {
             font-family: "Quicksand", sans-serif;
             font-weight: bold;
-            color: #9a211e;
+            color: var(--blood);
         }
     }
 }

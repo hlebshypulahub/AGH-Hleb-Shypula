@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getEmployees } from "../services/employee.service";
 import { LocaldateFormatter } from "../helpers/LocaldateFormatter";
@@ -7,6 +8,8 @@ import "./EmployeesTable.scss";
 const EmployeesTable = (props) => {
     const [employees, setEmployees] = useState([]);
     const [isLoading, setLoading] = useState(true);
+
+    const history = useHistory();
 
     useEffect(() => {
         const fetchEmployees = () => {
@@ -109,28 +112,26 @@ const EmployeesTable = (props) => {
 
     const rows = employees
         ? employees.map(
-              (
-                  {
-                      fullName,
-                      hiringDate,
-                      jobFacility,
-                      position,
-                      qualification,
-                      category,
-                      categoryNumber,
-                      categoryAssignmentDate,
-                      categoryAssignmentDeadlineDate,
-                      docsSubmitDeadlineDate,
-                      categoryPossiblePromotionDate,
-                      courseHoursSum,
-                      education,
-                      eduName,
-                      eduGraduationDate,
-                  },
-                  index
-              ) => {
+              ({
+                  id,
+                  fullName,
+                  hiringDate,
+                  jobFacility,
+                  position,
+                  qualification,
+                  category,
+                  categoryNumber,
+                  categoryAssignmentDate,
+                  categoryAssignmentDeadlineDate,
+                  docsSubmitDeadlineDate,
+                  categoryPossiblePromotionDate,
+                  courseHoursSum,
+                  education,
+                  eduName,
+                  eduGraduationDate,
+              }) => {
                   return {
-                      id: index,
+                      id,
                       fullName,
                       hiringDate: LocaldateFormatter(hiringDate),
                       jobFacility,
@@ -158,7 +159,13 @@ const EmployeesTable = (props) => {
     return (
         <div className="EmployeesTable">
             <div className="table">
-                <DataGrid rows={rows} columns={columns} />
+                <DataGrid
+                    onRowDoubleClick={(rowData) => {
+                        history.push("/employees/" + rowData.row.id);
+                    }}
+                    rows={rows}
+                    columns={columns}
+                />
             </div>
         </div>
     );

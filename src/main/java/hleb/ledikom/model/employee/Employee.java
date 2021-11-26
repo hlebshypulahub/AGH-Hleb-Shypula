@@ -28,9 +28,9 @@ public class Employee {
     private LocalDate hiringDate;
     private String jobFacility;
     private String position;
-    private String qualification;
 
     /// Category
+    private String qualification;
     private Category category;
     private String categoryNumber;
     private LocalDate categoryAssignmentDate;

@@ -1,5 +1,5 @@
 export const LocaldateFormatter = (localdate) => {
-    if (localdate === "") {
+    if (typeof localdate === "undefined" || localdate == null || localdate === "") {
         return "";
     }
     var dd = localdate.substring(8, 10);
@@ -7,4 +7,4 @@ export const LocaldateFormatter = (localdate) => {
     var yyyy = localdate.substring(0, 4);
 
     return dd + "." + mm + "." + yyyy;
-}
+};

@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+.EmployeeView {
+    padding: 20px;
+
+    font-family: "Quicksand", sans-serif;
+
+    .header-label {
+        display: inline-block;
+        padding-bottom: 5px;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .label-text {
+        display: inline-block;
+        width: 150px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .value-text {
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .first-row {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+        height: auto;
+        width: 100%;
+
+        .card {
+            position: relative;
+            width: calc(33.33% - 20px);
+            margin: 10px;
+
+            .card-content {
+                height: calc(100% - 40px);
+            }
+
+            .course-label,
+            .course-hours {
+                color: white;
+                font-weight: 700;
+                position: absolute;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+
+            .course-hours {
+                font-size: 60px;
+                left: 50%;
+                top: 40%;
+            }
+
+            .course-label {
+                width: 284px;
+                font-size: 24px;
+                left: 50%;
+                top: 65%;
+            }
+        }
+    }
+}
