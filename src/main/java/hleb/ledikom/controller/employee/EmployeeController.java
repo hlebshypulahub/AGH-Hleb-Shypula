@@ -1,5 +1,6 @@
 package hleb.ledikom.controller.employee;
 
+import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.service.employee.EmployeeDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,21 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable long id) {
         return ResponseEntity.ok(employeeDataService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee newEmployee) {
+        return ResponseEntity.ok(employeeDataService.findById(id)
+                                                    .map(employee -> {
+                                                        employee = new Employee(newEmployee);
+                                                        return employeeDataService.save(employee);
+                                                    })
+                                                    .orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id)));
+    }
+
+    @PostMapping("/{id}/courses")
+    public Employee addCourse(@PathVariable(name = "id") long employeeId, @RequestBody Course course) {
+        return employeeDataService.addCourse(course, employeeId);
     }
 
 }

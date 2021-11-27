@@ -1,5 +1,7 @@
 package hleb.ledikom.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -17,8 +19,10 @@ public class Course {
     private LocalDate startDate;
     private LocalDate endDate;
 
+
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonBackReference
     private Employee employee;
 
     public Course() {
@@ -70,5 +74,13 @@ public class Course {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

@@ -8,26 +8,24 @@
     .header-label {
         display: inline-block;
         padding-bottom: 5px;
-        font-size: 20px;
+        font-size: 26px;
         font-weight: 700;
     }
 
-    .label-text {
-        display: inline-block;
-        width: 150px;
-        font-size: 18px;
-        font-weight: 500;
+    .card-label {
+        overflow:auto;
+        :first-child {
+            float: left;
+        }
+
+        :nth-child(2) {
+            float: right;
+        }
     }
 
-    .label-text-large {
-        display: inline-block;
-        width: 250px;
-        font-size: 18px;
-        font-weight: 500;
-    }
-
-    .value-text {
-        font-size: 18px;
+    .bold-text {
+        color: white;
+        font-size: 22px;
         font-weight: 700;
     }
 
@@ -43,8 +41,32 @@
             width: calc(33.33% - 20px);
             margin: 10px;
 
+            .label-text {
+                display: inline-block;
+                width: 150px;
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .label-text-large {
+                display: inline-block;
+                width: 250px;
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .value-text {
+                font-size: 18px;
+                font-weight: 700;
+            }
+
             .card-content {
                 height: calc(100% - 40px);
+
+                > div {
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                }
             }
 
             .course-label,
@@ -67,6 +89,62 @@
                 font-size: 24px;
                 left: 50%;
                 top: 65%;
+            }
+        }
+
+        .main-info {
+            .label-text {
+                display: inline-block;
+                width: 180px;
+                font-size: 22px;
+                font-weight: 500;
+            }
+
+            .value-text {
+                font-size: 22px;
+                font-weight: 700;
+            }
+        }
+    }
+
+    .second-row {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+        width: 100%;
+
+        .card {
+            position: relative;
+            height: max-content;
+            width: calc(50% - 20px);
+            margin: 10px;
+
+            .label-text {
+                display: inline-block;
+                width: 150px;
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .label-text-large {
+                display: inline-block;
+                width: 250px;
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .value-text {
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+            .card-content {
+                height: calc(100% - 40px);
+
+                .info-row {
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                }
             }
         }
     }

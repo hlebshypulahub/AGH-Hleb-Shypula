@@ -24,7 +24,7 @@ export const Dashboard = (props) => {
                         variant="contained"
                         startIcon={<PeopleAltIcon />}
                         style={{
-                            backgroundColor: "#FFFF40",
+                            backgroundColor: "#f5f551",
                             color: "black",
                             fontWeight: "bold",
                             height: "40px",

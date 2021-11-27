@@ -1,17 +1,17 @@
 @import "../css/colors.css";
 
-.EmployeesTable {
-    padding: 20px;
+.CoursesTable {
+    padding: 10px;
 
     .table {
         height: 700px;
 
         .MuiDataGrid-row:nth-child(odd) {
-            background-color: var(--row2);
+            background-color: rgb(242, 249, 255);
         }
 
         .MuiDataGrid-row:nth-child(even) {
-            background-color: var(--row1);
+            background-color: rgb(243, 243, 243);
         }
 
         .MuiDataGrid-main, .MuiDataGrid-footerContainer {
