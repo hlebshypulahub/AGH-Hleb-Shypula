@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 // import CardFooter from "@mui/material/CardFooter";
+import Tooltip from "@mui/material/Tooltip";
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
 
@@ -43,20 +44,14 @@ const EmployeeView = (props) => {
                         <div className="card-label">
                             <span className="header-label">Dane osobowe</span>
                             <span
-                                className="bold-text"
+                                className="pin"
                                 style={
                                     employee.active
                                         ? {
                                               backgroundColor: "#3da13f",
-                                              borderRadius: "5px",
-                                              padding: "5px",
-                                              display: "inline-block",
                                           }
                                         : {
                                               backgroundColor: "#ff4747",
-                                              borderRadius: "5px",
-                                              padding: "5px",
-                                              display: "inline-block",
                                           }
                                 }
                             >
@@ -155,13 +150,7 @@ const EmployeeView = (props) => {
                                 )}
                             </span>
                         </div>
-                        <CardActions
-                            style={{
-                                paddingTop: "15px",
-                                paddingBottom: "0px",
-                                paddingLeft: "0px",
-                            }}
-                        >
+                        <CardActions className="card-actions">
                             <Button
                                 variant="outlined"
                                 style={{ fontWeight: "bold" }}
@@ -189,107 +178,32 @@ const EmployeeView = (props) => {
                 </Card>
             </div>
             <div className="second-row">
-                <Card
-                    className="card"
-                    onMouseEnter={() => setShownEducation(true)}
-                    onMouseLeave={() => setShownEducation(false)}
+                <Tooltip
+                    title={shownEducation ? "" : "Kliknuj, aby rozwinąć"}
+                    followCursor
                 >
-                    <CardContent
-                        className="card-content"
-                        style={{
-                            backgroundColor: banana_color,
-                        }}
+                    <Card
+                        className="card"
+                        onClick={() => setShownEducation(!shownEducation)}
                     >
-                        <span className="header-label">Wykształcenie</span>
-                        <Collapse in={shownEducation} timeout={700}>
-                            <div className="info-row">
-                                <span className="label-text">Rodzaj:</span>
-                                <span className="value-text">
-                                    {employee.education}
-                                </span>
-                            </div>
-                            <div className="info-row">
-                                <span className="label-text">Szkoła:</span>
-                                <span className="value-text">
-                                    {employee.eduName}
-                                </span>
-                            </div>
-                            <div className="info-row">
-                                <span className="label-text">
-                                    Data zakończenia:
-                                </span>
-                                <span className="value-text">
-                                    {formatter(employee.eduGraduationDate)}
-                                </span>
-                            </div>
-                            <CardActions
-                                style={{
-                                    paddingTop: "15px",
-                                    paddingBottom: "0px",
-                                    paddingLeft: "0px",
-                                }}
-                            >
-                                <Button
-                                    variant="outlined"
-                                    style={{ fontWeight: "bold" }}
-                                    size="large"
-                                >
-                                    Edytuj
-                                </Button>
-                            </CardActions>
-                        </Collapse>
-                    </CardContent>
-                </Card>
-                <Card
-                    className="card"
-                    onMouseEnter={() => setShownExemption(true)}
-                    onMouseLeave={() => setShownExemption(false)}
-                >
-                    <CardContent
-                        className="card-content"
-                        style={{
-                            backgroundColor: banana_color,
-                        }}
-                    >
-                        <div className="card-label">
-                            <span className="header-label">Zwolnienie</span>
-                            <span
-                                className="bold-text"
-                                style={
-                                    employee.exemptioned
-                                        ? {
-                                              backgroundColor: "#ff4747",
-                                              borderRadius: "5px",
-                                              padding: "5px",
-                                              display: "inline-block",
-                                          }
-                                        : {
-                                              backgroundColor: "#3da13f",
-                                              borderRadius: "5px",
-                                              padding: "5px",
-                                              display: "inline-block",
-                                          }
-                                }
-                            >
-                                {employee.exemptioned ? "Zwolniony" : "Brak"}
-                            </span>
-                        </div>
-                        {employee.exemptioned && (
-                            <Collapse in={shownExemption} timeout={700}>
+                        <CardContent
+                            className="card-content"
+                            style={{
+                                backgroundColor: banana_color,
+                            }}
+                        >
+                            <span className="header-label">Wykształcenie</span>
+                            <Collapse in={shownEducation} timeout={700}>
                                 <div className="info-row">
-                                    <span className="label-text">
-                                        Przyczyna:
-                                    </span>
+                                    <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
-                                        {employee.certificationExemptionReason}
+                                        {employee.education}
                                     </span>
                                 </div>
                                 <div className="info-row">
-                                    <span className="label-text">
-                                        Data początku:
-                                    </span>
+                                    <span className="label-text">Szkoła:</span>
                                     <span className="value-text">
-                                        {formatter(employee.exemptionStartDate)}
+                                        {employee.eduName}
                                     </span>
                                 </div>
                                 <div className="info-row">
@@ -297,16 +211,10 @@ const EmployeeView = (props) => {
                                         Data zakończenia:
                                     </span>
                                     <span className="value-text">
-                                        {formatter(employee.exemptionEndDate)}
+                                        {formatter(employee.eduGraduationDate)}
                                     </span>
                                 </div>
-                                <CardActions
-                                    style={{
-                                        paddingTop: "15px",
-                                        paddingBottom: "0px",
-                                        paddingLeft: "0px",
-                                    }}
-                                >
+                                <CardActions className="card-actions">
                                     <Button
                                         variant="outlined"
                                         style={{ fontWeight: "bold" }}
@@ -316,9 +224,88 @@ const EmployeeView = (props) => {
                                     </Button>
                                 </CardActions>
                             </Collapse>
-                        )}
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </Tooltip>
+                <Tooltip
+                    title={shownExemption || !employee.exemptioned ? "" : "Kliknuj, aby rozwinąć"}
+                    followCursor
+                >
+                    <Card
+                        className="card"
+                        onClick={() => setShownExemption(!shownExemption)}
+                    >
+                        <CardContent
+                            className="card-content"
+                            style={{
+                                backgroundColor: banana_color,
+                            }}
+                        >
+                            <div className="card-label">
+                                <span className="header-label">Zwolnienie</span>
+                                <span
+                                    className="pin"
+                                    style={
+                                        employee.exemptioned
+                                            ? {
+                                                  backgroundColor: "#ff4747",
+                                              }
+                                            : {
+                                                  backgroundColor: "#3da13f",
+                                              }
+                                    }
+                                >
+                                    {employee.exemptioned
+                                        ? "Zwolniony"
+                                        : "Brak"}
+                                </span>
+                            </div>
+                            {employee.exemptioned && (
+                                <Collapse in={shownExemption} timeout={700}>
+                                    <div className="info-row">
+                                        <span className="label-text">
+                                            Przyczyna:
+                                        </span>
+                                        <span className="value-text">
+                                            {
+                                                employee.certificationExemptionReason
+                                            }
+                                        </span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="label-text">
+                                            Data początku:
+                                        </span>
+                                        <span className="value-text">
+                                            {formatter(
+                                                employee.exemptionStartDate
+                                            )}
+                                        </span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="label-text">
+                                            Data zakończenia:
+                                        </span>
+                                        <span className="value-text">
+                                            {formatter(
+                                                employee.exemptionEndDate
+                                            )}
+                                        </span>
+                                    </div>
+                                    <CardActions className="card-actions">
+                                        <Button
+                                            variant="outlined"
+                                            style={{ fontWeight: "bold" }}
+                                            size="large"
+                                        >
+                                            Edytuj
+                                        </Button>
+                                    </CardActions>
+                                </Collapse>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Tooltip>
             </div>
             <CoursesTable employee={employee} />
         </div>

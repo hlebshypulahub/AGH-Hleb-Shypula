@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getEmployees } from "../services/employee.service";
-import { LocaldateFormatter } from "../helpers/LocaldateFormatter";
+import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
 import "./EmployeesTable.scss";
 
 const EmployeesTable = (props) => {
@@ -23,90 +23,104 @@ const EmployeesTable = (props) => {
     }, []);
 
     const columns = [
-        { field: "fullName", headerName: "Imię i nazwisko", width: 160 },
+        { field: "fullName", headerName: "Imię i nazwisko", width: 200 },
         {
             field: "hiringDate",
             headerName: "Data zatrudnienia",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "jobFacility",
             headerName: "Miejsce pracy",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "position",
             headerName: "Stanowisko",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "qualification",
             headerName: "Kwalifikacja",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "category",
             headerName: "Kategoria",
-            width: 100,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "categoryNumber",
             headerName: "Numer kategorii",
             hide: true,
-            width: 100,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "categoryAssignmentDate",
             headerName: "Data nadania kategorii",
             type: "date",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "categoryAssignmentDeadlineDate",
             headerName: "Termin potwierdzenia kategorii",
             type: "date",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "docsSubmitDeadlineDate",
             headerName: "Termin dostarczenia dokumentów",
             type: "date",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "categoryPossiblePromotionDate",
             headerName: "Możliwe nadanie kolejnej kategorii po",
             type: "date",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "courseHoursSum",
             headerName: "Suma godzin",
             type: "number",
-            width: 100,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "education",
             headerName: "Wykształcenie",
             hide: true,
-            width: 100,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "eduName",
             headerName: "Szkoła",
             hide: true,
-            width: 150,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "eduGraduationDate",
             headerName: "Data zakończenia studiów",
             hide: true,
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
     ];
 
@@ -133,20 +147,24 @@ const EmployeesTable = (props) => {
                   return {
                       id,
                       fullName,
-                      hiringDate: LocaldateFormatter(hiringDate),
+                      hiringDate: formatter(hiringDate),
                       jobFacility,
                       position,
                       qualification,
                       category,
                       categoryNumber,
-                      categoryAssignmentDate,
-                      categoryAssignmentDeadlineDate,
-                      docsSubmitDeadlineDate,
-                      categoryPossiblePromotionDate,
+                      categoryAssignmentDate: formatter(categoryAssignmentDate),
+                      categoryAssignmentDeadlineDate: formatter(
+                          categoryAssignmentDeadlineDate
+                      ),
+                      docsSubmitDeadlineDate: formatter(docsSubmitDeadlineDate),
+                      categoryPossiblePromotionDate: formatter(
+                          categoryPossiblePromotionDate
+                      ),
                       courseHoursSum,
                       education,
                       eduName,
-                      eduGraduationDate,
+                      eduGraduationDate: formatter(eduGraduationDate),
                   };
               }
           )

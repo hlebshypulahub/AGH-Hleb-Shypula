@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@import "../css/fonts.css";
 
 .EmployeeView {
     padding: 20px;
@@ -13,7 +13,7 @@
     }
 
     .card-label {
-        overflow:auto;
+        overflow: auto;
         :first-child {
             float: left;
         }
@@ -23,10 +23,13 @@
         }
     }
 
-    .bold-text {
+    .pin {
         color: white;
         font-size: 22px;
         font-weight: 700;
+        border-radius: 5px;
+        padding: 5px;
+        display: inline-block;
     }
 
     .first-row {
@@ -66,6 +69,12 @@
                 > div {
                     padding-top: 4px;
                     padding-bottom: 4px;
+                }
+
+                .card-actions {
+                    padding-top: 15px;
+                    padding-bottom: 0px;
+                    padding-left: 0px;
                 }
             }
 
@@ -144,6 +153,12 @@
                 .info-row {
                     padding-top: 4px;
                     padding-bottom: 4px;
+                }
+
+                .card-actions {
+                    padding-top: 15px;
+                    padding-bottom: 0px;
+                    padding-left: 0px;
                 }
             }
         }

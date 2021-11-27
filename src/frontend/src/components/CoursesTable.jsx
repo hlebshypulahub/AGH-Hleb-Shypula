@@ -8,29 +8,32 @@ import "./CoursesTable.scss";
 const CoursesTable = (props) => {
     const employee = props.employee;
 
-    // const banana_color = "#fafff5";
-
     const columns = [
-        { field: "name", headerName: "Nazwa", width: 160 },
+        { field: "name", headerName: "Nazwa", width: 200 },
         {
             field: "description",
             headerName: "Opis",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "hours",
             headerName: "Ilość godzin",
-            width: 130,
+            type: "number",
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "startDate",
             headerName: "Data początku",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
         {
             field: "endDate",
             headerName: "Data końca",
-            width: 130,
+            flex: 1,
+            minWidth: 200,
         },
     ];
 
@@ -52,16 +55,7 @@ const CoursesTable = (props) => {
     return (
         <div className="CoursesTable">
             <div className="table">
-                <DataGrid
-                    // style={{
-                    //     backgroundColor: banana_color,
-                    // }}
-                    // onRowDoubleClick={(rowData) => {
-                    //     history.push("/employees/" + rowData.row.id);
-                    // }}
-                    rows={rows}
-                    columns={columns}
-                />
+                <DataGrid rows={rows} columns={columns} />
             </div>
         </div>
     );
