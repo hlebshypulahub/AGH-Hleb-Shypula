@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getEmployees } from "../services/employee.service";
 import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
-import "./EmployeesTable.scss";
+import "../css/EmployeesTable.scss";
 
 const EmployeesTable = (props) => {
     const [employees, setEmployees] = useState([]);

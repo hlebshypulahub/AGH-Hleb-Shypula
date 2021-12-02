@@ -1,5 +1,5 @@
 import LoginForm from "../components/LoginForm";
-import "./LoginPage.scss";
+import "../css/LoginPage.scss";
 import staffImg from "../img/staff_bg.jpg";
 
 const LoginPage = (props) => {

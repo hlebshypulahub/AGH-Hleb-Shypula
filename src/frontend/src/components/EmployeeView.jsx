@@ -6,12 +6,14 @@ import CardContent from "@mui/material/CardContent";
 import Tooltip from "@mui/material/Tooltip";
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
+import { useHistory } from "react-router-dom";
 
 import { getEmployeeById } from "../services/employee.service";
 import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
 import CoursesTable from "./CoursesTable";
+import { banana_color, green, red } from "../helpers/color";
 
-import "./EmployeeView.scss";
+import "../css/EmployeeView.scss";
 
 const EmployeeView = (props) => {
     const id = props.match.params.id;
@@ -19,7 +21,7 @@ const EmployeeView = (props) => {
     const [shownEducation, setShownEducation] = useState(false);
     const [shownExemption, setShownExemption] = useState(false);
 
-    const banana_color = "#fafff5";
+    const history = useHistory();
 
     useEffect(() => {
         const fetchEmployee = () => {
@@ -48,10 +50,10 @@ const EmployeeView = (props) => {
                                 style={
                                     employee.active
                                         ? {
-                                              backgroundColor: "#3da13f",
+                                              backgroundColor: green,
                                           }
                                         : {
-                                              backgroundColor: "#ff4747",
+                                              backgroundColor: red,
                                           }
                                 }
                             >
@@ -197,7 +199,9 @@ const EmployeeView = (props) => {
                                 <div className="info-row">
                                     <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
-                                        {employee.education}
+                                        {employee.education
+                                            ? employee.education.label
+                                            : ""}
                                     </span>
                                 </div>
                                 <div className="info-row">
@@ -219,6 +223,11 @@ const EmployeeView = (props) => {
                                         variant="outlined"
                                         style={{ fontWeight: "bold" }}
                                         size="large"
+                                        onClick={() => {
+                                            history.push(
+                                                `/employees/${employee.id}/edit-edu`
+                                            );
+                                        }}
                                     >
                                         Edytuj
                                     </Button>
@@ -228,7 +237,11 @@ const EmployeeView = (props) => {
                     </Card>
                 </Tooltip>
                 <Tooltip
-                    title={shownExemption || !employee.exemptioned ? "" : "Kliknuj, aby rozwinąć"}
+                    title={
+                        shownExemption || !employee.exemptioned
+                            ? ""
+                            : "Kliknuj, aby rozwinąć"
+                    }
                     followCursor
                 >
                     <Card
@@ -248,10 +261,10 @@ const EmployeeView = (props) => {
                                     style={
                                         employee.exemptioned
                                             ? {
-                                                  backgroundColor: "#ff4747",
+                                                  backgroundColor: red,
                                               }
                                             : {
-                                                  backgroundColor: "#3da13f",
+                                                  backgroundColor: green,
                                               }
                                     }
                                 >

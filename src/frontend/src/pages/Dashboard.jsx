@@ -4,9 +4,13 @@ import { Switch, Route, useHistory } from "react-router-dom";
 import HomePage from "./HomePage";
 import EmployeesPage from "./EmployeesPage";
 import EmployeeView from "../components/EmployeeView";
-import "./Dashboard.scss";
+import EditEducation from "../components/EditEducation";
+import "../css/Dashboard.scss";
 import Button from "@mui/material/Button";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+
+import { yellow } from "../helpers/color";
+
 
 export const Dashboard = (props) => {
     const history = useHistory();
@@ -24,7 +28,7 @@ export const Dashboard = (props) => {
                         variant="contained"
                         startIcon={<PeopleAltIcon />}
                         style={{
-                            backgroundColor: "#f5f551",
+                            backgroundColor: yellow,
                             color: "black",
                             fontWeight: "bold",
                             height: "40px",
@@ -41,7 +45,11 @@ export const Dashboard = (props) => {
                 <Route path="/home" component={HomePage} />
                 <Route path="/login" component={LoginPage} />
                 <Route exact path="/employees" component={EmployeesPage} />
-                <Route path="/employees/:id" component={EmployeeView} />
+                <Route exact path="/employees/:id" component={EmployeeView} />
+                <Route
+                    path="/employees/:id/edit-edu"
+                    component={EditEducation}
+                />
             </Switch>
         </div>
     );

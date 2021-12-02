@@ -44,7 +44,7 @@ public class Employee {
     private int courseHoursSum;
 
     /// Courses
-    @OneToMany(mappedBy = "employee", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Course> courses;
 
@@ -61,11 +61,6 @@ public class Employee {
     private Education education;
     private String eduName;
     private LocalDate eduGraduationDate;
-
-    {
-        this.active = true;
-        this.exemptioned = false;
-    }
 
     public Employee() {
 
@@ -120,6 +115,14 @@ public class Employee {
     public void addCourse(Course course) {
         course.setEmployee(this);
         this.courses.add(course);
+    }
+
+    public String getEduType() {
+        return education != null ? education.getLabel() : null;
+    }
+
+    public String getEduEnumName() {
+        return education != null ? education.name() : null;
     }
 
     public long getId() {

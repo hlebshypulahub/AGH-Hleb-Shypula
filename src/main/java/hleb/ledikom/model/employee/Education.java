@@ -19,6 +19,14 @@ public enum Education {
         return label;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public String getName() {
+        return this.name();
+    }
+
     public int getRequiredHoursNoneCategory() {
         return requiredHoursNoneCategory;
     }

@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import { login } from "../actions/auth";
 
 import { TextField, Button } from "@mui/material";
-import "./LoginForm.scss";
+import "../css/LoginForm.scss";
 
 const LoginForm = (props) => {
     const [username, setUsername] = useState("");

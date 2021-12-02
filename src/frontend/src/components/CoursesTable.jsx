@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getCourses } from "../services/employee.service";
 import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
-import "./CoursesTable.scss";
+import "../css/CoursesTable.scss";
 
 const CoursesTable = (props) => {
     const employee = props.employee;
