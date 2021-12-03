@@ -98,6 +98,8 @@ const EmployeesTable = (props) => {
             field: "courseHoursSum",
             headerName: "Suma godzin",
             type: "number",
+            headerAlign: "left",
+            align: "left",
             flex: 1,
             minWidth: 200,
         },

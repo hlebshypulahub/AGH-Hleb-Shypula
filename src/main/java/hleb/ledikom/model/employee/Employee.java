@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -23,7 +21,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
-    long id;
+    Long id;
 
     /// Id from accounting app
     long foreignId;
@@ -37,7 +35,6 @@ public class Employee {
 
     /// Category
     private String qualification;
-    @NotNull(message = "CAAAAAAAA")
     private Category category;
     private String categoryNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
@@ -69,12 +66,9 @@ public class Employee {
     private boolean active;
 
     /// Education
-    @NotNull(message = "A")
     private Education education;
-    @NotBlank(message = "B")
     private String eduName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-    @NotNull(message = "C")
     private LocalDate eduGraduationDate;
 
     public Employee() {
@@ -153,11 +147,11 @@ public class Employee {
         return education != null ? education.name() : null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

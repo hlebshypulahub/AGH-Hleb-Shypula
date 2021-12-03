@@ -3,7 +3,5 @@ export const DateFormatter = (date) => {
         return null;
     }
 
-    console.log(date.toLocaleDateString());
-
     return date.toLocaleDateString();
 };

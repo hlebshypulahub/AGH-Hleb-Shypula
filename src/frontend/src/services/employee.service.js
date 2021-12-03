@@ -75,8 +75,10 @@ export const getEmployeeById = (id) => {
 //         });
 // };
 
-export const patchEmployee = (id, patch) => {
-    return fetch(API_BASE_URL + "/" + id, {
+// application/merge-patch+json
+
+export const patchEmployeeEducation = (id, patch) => {
+    return fetch(API_BASE_URL + "/" + id + "/education", {
         method: "PATCH",
         body: JSON.stringify(patch),
         headers: Object.assign(
@@ -89,9 +91,8 @@ export const patchEmployee = (id, patch) => {
             if (response.ok) {
                 return response.json();
             } else {
-                return response.text().then((text) => {
-                    throw new Error(text);
-                });
+                console.log(response.clone().json());
+                throw new Error(response.clone().json());
             }
         })
         .catch((error) => {

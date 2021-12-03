@@ -1,12 +1,10 @@
 package hleb.ledikom.controller.employee;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatchException;
-import com.github.fge.jsonpatch.mergepatch.JsonMergePatch;
 import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.dto.EmployeeEducationPatchDto;
 import hleb.ledikom.service.employee.EmployeeDataService;
 import hleb.ledikom.service.employee.EmployeeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +28,6 @@ public class EmployeeController {
     @Autowired
     EmployeeValidationService employeeValidationService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @GetMapping("")
     public List<Employee> getEmployees() {
         return employeeDataService.getEmployees();
@@ -53,46 +48,10 @@ public class EmployeeController {
                                                     .orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id)));
     }
 
-//    @PutMapping("/{id}/update-education")
-//    public ResponseEntity<Employee> updateEmployeeEducation(@PathVariable long id, @RequestBody Employee newEmployee) {
-//        return ResponseEntity.ok(employeeDataService.findById(id)
-//                                                    .map(employee -> {
-//                                                        employeeValidationService.validateEmployeeEducation(newEmployee);
-//                                                        employee = new Employee(newEmployee);
-//                                                        return employeeDataService.save(employee);
-//                                                    })
-//                                                    .orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id)));
-//    }
-
-    @PatchMapping(path = "/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<Employee> patchEmployee(@PathVariable Long id, @RequestBody JsonMergePatch jsonMergePatch) throws JsonPatchException, JsonProcessingException {
-        Employee employee = employeeDataService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id));
-
-        @Valid
-        Employee employeePatched = applyPatchToEmployee(jsonMergePatch, employee);
-
-        System.out.println(employeePatched);
-
-        return ResponseEntity.ok(employeeDataService.save(employeePatched));
+    @PatchMapping(path = "/{id}/education", consumes = "application/merge-patch+json")
+    public ResponseEntity<Employee> patchEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeEducationPatchDto employeeEducationPatchDto) throws JsonPatchException, JsonProcessingException {
+        return ResponseEntity.ok(employeeDataService.patch(id, employeeEducationPatchDto));
     }
-
-    private Employee applyPatchToEmployee(JsonMergePatch jsonMergePatch, Employee targetEmployee) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = jsonMergePatch.apply(objectMapper.convertValue(targetEmployee, JsonNode.class));
-        return objectMapper.treeToValue(patched, Employee.class);
-    }
-
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public Map<String, String> handleValidationExceptions(ConstraintViolationException ex) {
-//        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-//        Map<String, String> errors = new HashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return errors;
-//    }
 
     @PostMapping("/{id}/courses")
     public Employee addCourse(@PathVariable(name = "id") long employeeId, @RequestBody Course course) {

@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { getCourses } from "../services/employee.service";
 import "../css/CoursesTable.scss";
 
 const CoursesTable = (props) => {
@@ -19,6 +17,8 @@ const CoursesTable = (props) => {
             field: "hours",
             headerName: "Ilość godzin",
             type: "number",
+            headerAlign: "left",
+            align: "left",
             flex: 1,
             minWidth: 200,
         },

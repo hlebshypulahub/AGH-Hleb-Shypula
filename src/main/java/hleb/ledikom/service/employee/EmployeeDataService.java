@@ -2,7 +2,9 @@ package hleb.ledikom.service.employee;
 
 import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.dto.EmployeePatchDto;
 import hleb.ledikom.repository.EmployeeRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -33,9 +35,13 @@ public class EmployeeDataService {
 
         employee.addCourse(course);
 
-
-
         return employeeRepository.save(employee);
+    }
+
+    public Employee patch(Long id, EmployeePatchDto employeePatchDto) {
+        Employee employee = findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id));
+        BeanUtils.copyProperties(employeePatchDto, employee);
+        return save(employee);
     }
 
 }

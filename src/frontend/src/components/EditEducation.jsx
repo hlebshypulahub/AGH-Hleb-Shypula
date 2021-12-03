@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import MyTextField from "./MyTextField";
+import MyDatePicker from "./MyDatePicker";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import validator from "validator";
@@ -10,12 +11,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 import { getEducationValues } from "../services/education.service";
-import { getEmployeeById, patchEmployee } from "../services/employee.service";
+import { getEmployeeById, patchEmployeeEducation } from "../services/employee.service";
 import { DateParser as parse } from "../helpers/DateParser";
 import { DateFormatter as format } from "../helpers/DateFormatter";
 
@@ -29,6 +27,11 @@ const EditEducation = (props) => {
     const [eduName, setEduName] = useState("");
     const [eduGraduationDate, setEduGraduationDate] = useState({});
     const [employee, setEmployee] = useState({});
+    const [errors, setErrors] = useState({
+        eduType: "",
+        eduName: "",
+        eduGraduationDate: {},
+    });
 
     const history = useHistory();
 
@@ -42,33 +45,37 @@ const EditEducation = (props) => {
         fetchEducationValues();
     }, []);
 
+    const validate = useCallback(() => {
+        let tempErrors = {};
+        tempErrors.eduType = eduType ? "" : "Należy podać rodzaj wykształcenia";
+        tempErrors.eduName = eduName ? "" : "Należy podać nazwę szkoły";
+        tempErrors.eduGraduationDate = validator.isDate(eduGraduationDate)
+            ? ""
+            : "Należy podać datę ukończenia stodiów";
+
+        setErrors(tempErrors);
+
+        return Object.values(tempErrors).every((item) => item === "");
+    }, [eduType, eduName, eduGraduationDate]);
+
     useEffect(() => {
         const fetchEmployee = () => {
             getEmployeeById(id).then((data) => {
                 setEmployee(data);
+                setEduGraduationDate(parse(data.eduGraduationDate));
+                setEduName(data.eduName);
+                setEduType(data.eduType);
             });
         };
 
-        fetchEmployee();
-
-        setEduGraduationDate(parse(employee.eduGraduationDate));
-        setEduName(employee.eduName);
-        setEduType(employee.eduType);
-
-        console.log(1);
-    }, [id, employee.eduGraduationDate, employee.eduName, employee.eduType]);
+        fetchEmployee("fetchEmployee");
+    }, [id]);
 
     const handleSubmit = useCallback(
         (e) => {
             e.preventDefault();
 
-            console.log(eduGraduationDate + " " + eduName + " " + eduType);
-
-            if (
-                validator.isDate(eduGraduationDate) &&
-                eduName != null &&
-                eduType != null
-            ) {
+            if (validate()) {
                 const patch = {
                     eduName,
                     eduGraduationDate: format(eduGraduationDate),
@@ -80,27 +87,37 @@ const EditEducation = (props) => {
                             : null,
                 };
 
-                patchEmployee(employee.id, patch).then(() => {
-                    console.log("employee updated");
+                patchEmployeeEducation(employee.id, patch).then(() => {
                     history.push(`/employees/${employee.id}`);
                 });
             } else {
+                return;
             }
         },
-        [eduName, eduGraduationDate, eduType, employee, history]
+        [eduName, eduGraduationDate, eduType, employee, history, validate]
     );
 
-    const onChangeName = (e) => {
-        const name = e.target.value;
-        setEduName(name);
+    useEffect(() => {
+        validate();
+    }, [validate]);
+
+    const onChangeEduName = (e) => {
+        const newName = e.target.value;
+        setEduName(newName);
     };
 
     const onChangeEduType = (e) => {
-        const eduType = e.target.value;
-        setEduType(eduType);
+        const newEduType = e.target.value;
+        setEduType(newEduType);
     };
 
     const onChangeEduGraduationDate = (newEduGraduationDate) => {
+        if (newEduGraduationDate == null || newEduGraduationDate === undefined) {
+            setErrors({
+                ...errors,
+                eduGraduationDate: "Należy podać datę ukończenia stodiów",
+            });
+        }
         setEduGraduationDate(newEduGraduationDate);
     };
 
@@ -121,11 +138,19 @@ const EditEducation = (props) => {
                     <form className="form" onSubmit={handleSubmit}>
                         <div className="input text-field">
                             <MyTextField
-                                id="custom-css-outlined-input"
+                                disabled
+                                label="Imię i nazwisko"
+                                value={
+                                    employee.fullName ? employee.fullName : ""
+                                }
+                            />
+                        </div>
+                        <div className="input text-field">
+                            <MyTextField
+                                error={errors.eduType.length > 0}
+                                helperText={errors.eduType}
                                 select
-                                defaultValue=""
                                 label="Rodzaj"
-                                variant="outlined"
                                 value={eduType ? eduType : ""}
                                 onChange={onChangeEduType}
                             >
@@ -143,32 +168,21 @@ const EditEducation = (props) => {
                         </div>
                         <div className="input text-field">
                             <MyTextField
-                                id="custom-css-outlined-input"
-                                className="input"
+                                error={errors.eduName.length > 0}
+                                helperText={errors.eduName}
                                 label="Nazwa szkoły"
-                                variant="outlined"
                                 value={eduName ? eduName : ""}
-                                onChange={onChangeName}
+                                onChange={onChangeEduName}
                             />
                         </div>
                         <div className="input text-field">
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopDatePicker
-                                    label="Data zakończenia"
-                                    mask="__.__.____"
-                                    inputFormat="dd.MM.yyyy"
-                                    value={eduGraduationDate}
-                                    onChange={onChangeEduGraduationDate}
-                                    renderInput={(params) => (
-                                        <MyTextField
-                                            {...params}
-                                            onFocus={(event) => {
-                                                event.target.select();
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </LocalizationProvider>
+                            <MyDatePicker
+                                error={errors.eduGraduationDate.length > 0}
+                                helperText={errors.eduGraduationDate.toString()}
+                                label="Data zakończenia"
+                                value={eduGraduationDate}
+                                onChange={onChangeEduGraduationDate}
+                            />
                         </div>
                         <div className="buttons">
                             <Button
@@ -180,7 +194,9 @@ const EditEducation = (props) => {
                                     fontWeight: "bold",
                                     height: "40px",
                                 }}
-                                onClick={handleSubmit}
+                                onClick={() => {
+                                    history.goBack();
+                                }}
                             >
                                 Anuluj
                             </Button>
