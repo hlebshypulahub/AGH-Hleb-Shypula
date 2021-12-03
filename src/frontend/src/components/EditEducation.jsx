@@ -4,14 +4,20 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import validator from "validator";
 
+import { useHistory } from "react-router-dom";
+
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 import { getEducationValues } from "../services/education.service";
-import { getEmployeeById } from "../services/employee.service";
+import { getEmployeeById, patchEmployee } from "../services/employee.service";
+import { DateParser as parse } from "../helpers/DateParser";
+import { DateFormatter as format } from "../helpers/DateFormatter";
 
 import { banana_color, green, red } from "../helpers/color";
 import "../css/EditEducation.scss";
@@ -21,8 +27,10 @@ const EditEducation = (props) => {
     const [eduType, setEduType] = useState("");
     const [eduTypes, setEduTypes] = useState([]);
     const [eduName, setEduName] = useState("");
-    const [eduGraduationDate, setEduGraduationDate] = useState("");
+    const [eduGraduationDate, setEduGraduationDate] = useState({});
     const [employee, setEmployee] = useState({});
+
+    const history = useHistory();
 
     useEffect(() => {
         const fetchEducationValues = () => {
@@ -42,12 +50,11 @@ const EditEducation = (props) => {
         };
 
         fetchEmployee();
-        const eduGraduationDate = employee.eduGraduationDate;
-        setEduGraduationDate(eduGraduationDate);
-        const eduName = employee.eduName;
-        setEduName(eduName);
-        const eduType = employee.eduType;
-        setEduType(eduType);
+
+        setEduGraduationDate(parse(employee.eduGraduationDate));
+        setEduName(employee.eduName);
+        setEduType(employee.eduType);
+
         console.log(1);
     }, [id, employee.eduGraduationDate, employee.eduName, employee.eduType]);
 
@@ -55,13 +62,32 @@ const EditEducation = (props) => {
         (e) => {
             e.preventDefault();
 
-            if (validator.isDate(eduGraduationDate)) {
-                console.log(eduName + " " + eduGraduationDate + " " + eduType);
+            console.log(eduGraduationDate + " " + eduName + " " + eduType);
+
+            if (
+                validator.isDate(eduGraduationDate) &&
+                eduName != null &&
+                eduType != null
+            ) {
+                const patch = {
+                    eduName,
+                    eduGraduationDate: format(eduGraduationDate),
+                    education:
+                        eduType === "Wyższe"
+                            ? "HIGHER"
+                            : eduType === "Średnie"
+                            ? "SECONDARY"
+                            : null,
+                };
+
+                patchEmployee(employee.id, patch).then(() => {
+                    console.log("employee updated");
+                    history.push(`/employees/${employee.id}`);
+                });
             } else {
-                console.log("error");
             }
         },
-        [eduName, eduGraduationDate, eduType]
+        [eduName, eduGraduationDate, eduType, employee, history]
     );
 
     const onChangeName = (e) => {
@@ -74,40 +100,9 @@ const EditEducation = (props) => {
         setEduType(eduType);
     };
 
-    const onChangeEduGraduationDate = (e) => {
-        const eduGraduationDate = e.target.value;
-        setEduGraduationDate(eduGraduationDate);
+    const onChangeEduGraduationDate = (newEduGraduationDate) => {
+        setEduGraduationDate(newEduGraduationDate);
     };
-
-    // const getEduGraduationDate = () => {
-    //     return eduGraduationDate === "" && !employee.eduGraduationDate
-    //         ? ""
-    //         : eduGraduationDate !== ""
-    //         ? eduGraduationDate
-    //         : employee.eduGraduationDate
-    //         ? employee.eduGraduationDate
-    //         : "";
-    // };
-
-    // const getEduName = () => {
-    //     return eduName === "" && !employee.eduName
-    //         ? ""
-    //         : eduName !== ""
-    //         ? eduName
-    //         : employee.eduName
-    //         ? employee.eduName
-    //         : "";
-    // };
-
-    // const getEduType = () => {
-    //     return eduType === "" && !employee.eduType
-    //         ? ""
-    //         : eduType !== ""
-    //         ? eduType
-    //         : employee.eduType
-    //         ? employee.eduType
-    //         : "";
-    // };
 
     return (
         <div className="EditEducation">
@@ -157,18 +152,23 @@ const EditEducation = (props) => {
                             />
                         </div>
                         <div className="input text-field">
-                            <MyTextField
-                                id="custom-css-outlined-input"
-                                label="Data zakończenia"
-                                type="date"
-                                value={
-                                    eduGraduationDate ? eduGraduationDate : ""
-                                }
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                onChange={onChangeEduGraduationDate}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DesktopDatePicker
+                                    label="Data zakończenia"
+                                    mask="__.__.____"
+                                    inputFormat="dd.MM.yyyy"
+                                    value={eduGraduationDate}
+                                    onChange={onChangeEduGraduationDate}
+                                    renderInput={(params) => (
+                                        <MyTextField
+                                            {...params}
+                                            onFocus={(event) => {
+                                                event.target.select();
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </LocalizationProvider>
                         </div>
                         <div className="buttons">
                             <Button

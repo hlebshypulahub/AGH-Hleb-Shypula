@@ -9,7 +9,6 @@ import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
 
 import { getEmployeeById } from "../services/employee.service";
-import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
 import CoursesTable from "./CoursesTable";
 import { banana_color, green, red } from "../helpers/color";
 
@@ -71,7 +70,7 @@ const EmployeeView = (props) => {
                                 Data zatrudnienia:
                             </span>
                             <span className="value-text">
-                                {formatter(employee.hiringDate)}
+                                {employee.hiringDate}
                             </span>
                         </div>
                         <div>
@@ -121,7 +120,7 @@ const EmployeeView = (props) => {
                                 Data nadania:
                             </span>
                             <span className="value-text">
-                                {formatter(employee.categoryAssignmentDate)}
+                                {employee.categoryAssignmentDate}
                             </span>
                         </div>
                         <div>
@@ -129,9 +128,7 @@ const EmployeeView = (props) => {
                                 Termin potwierdzenia:
                             </span>
                             <span className="value-text">
-                                {formatter(
-                                    employee.categoryAssignmentDeadlineDate
-                                )}
+                                {employee.categoryAssignmentDeadlineDate}
                             </span>
                         </div>
                         <div>
@@ -139,7 +136,7 @@ const EmployeeView = (props) => {
                                 Termin dostarczenia dokumentów:
                             </span>
                             <span className="value-text">
-                                {formatter(employee.docsSubmitDeadlineDate)}
+                                {employee.docsSubmitDeadlineDate}
                             </span>
                         </div>
                         <div>
@@ -147,9 +144,7 @@ const EmployeeView = (props) => {
                                 Możliwe nadanie kolejnej kategorii:
                             </span>
                             <span className="value-text">
-                                {formatter(
-                                    employee.categoryPossiblePromotionDate
-                                )}
+                                {employee.categoryPossiblePromotionDate}
                             </span>
                         </div>
                         <CardActions className="card-actions">
@@ -199,9 +194,7 @@ const EmployeeView = (props) => {
                                 <div className="info-row">
                                     <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
-                                        {employee.education
-                                            ? employee.education.label
-                                            : ""}
+                                        {employee.eduType}
                                     </span>
                                 </div>
                                 <div className="info-row">
@@ -215,7 +208,7 @@ const EmployeeView = (props) => {
                                         Data zakończenia:
                                     </span>
                                     <span className="value-text">
-                                        {formatter(employee.eduGraduationDate)}
+                                        {employee.eduGraduationDate}
                                     </span>
                                 </div>
                                 <CardActions className="card-actions">
@@ -290,9 +283,7 @@ const EmployeeView = (props) => {
                                             Data początku:
                                         </span>
                                         <span className="value-text">
-                                            {formatter(
-                                                employee.exemptionStartDate
-                                            )}
+                                            {employee.exemptionStartDate}
                                         </span>
                                     </div>
                                     <div className="info-row">
@@ -300,9 +291,7 @@ const EmployeeView = (props) => {
                                             Data zakończenia:
                                         </span>
                                         <span className="value-text">
-                                            {formatter(
-                                                employee.exemptionEndDate
-                                            )}
+                                            {employee.exemptionEndDate}
                                         </span>
                                     </div>
                                     <CardActions className="card-actions">

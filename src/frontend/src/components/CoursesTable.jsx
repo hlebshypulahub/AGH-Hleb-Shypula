@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getCourses } from "../services/employee.service";
-import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
 import "../css/CoursesTable.scss";
 
 const CoursesTable = (props) => {
@@ -45,8 +44,8 @@ const CoursesTable = (props) => {
                       name,
                       description,
                       hours,
-                      startDate: formatter(startDate),
-                      endDate: formatter(endDate),
+                      startDate,
+                      endDate,
                   };
               }
           )

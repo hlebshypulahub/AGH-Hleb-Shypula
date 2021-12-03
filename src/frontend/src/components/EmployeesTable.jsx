@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { getEmployees } from "../services/employee.service";
-import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
+// import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
 import "../css/EmployeesTable.scss";
 
 const EmployeesTable = (props) => {
@@ -147,24 +147,20 @@ const EmployeesTable = (props) => {
                   return {
                       id,
                       fullName,
-                      hiringDate: formatter(hiringDate),
+                      hiringDate,
                       jobFacility,
                       position,
                       qualification,
                       category,
                       categoryNumber,
-                      categoryAssignmentDate: formatter(categoryAssignmentDate),
-                      categoryAssignmentDeadlineDate: formatter(
-                          categoryAssignmentDeadlineDate
-                      ),
-                      docsSubmitDeadlineDate: formatter(docsSubmitDeadlineDate),
-                      categoryPossiblePromotionDate: formatter(
-                          categoryPossiblePromotionDate
-                      ),
+                      categoryAssignmentDate,
+                      categoryAssignmentDeadlineDate,
+                      docsSubmitDeadlineDate,
+                      categoryPossiblePromotionDate,
                       courseHoursSum,
                       education,
                       eduName,
-                      eduGraduationDate: formatter(eduGraduationDate),
+                      eduGraduationDate,
                   };
               }
           )

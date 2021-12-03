@@ -1,8 +1,11 @@
 package hleb.ledikom.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,17 +30,23 @@ public class Employee {
 
     /// Main info
     private String fullName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate hiringDate;
     private String jobFacility;
     private String position;
 
     /// Category
     private String qualification;
+    @NotNull(message = "CAAAAAAAA")
     private Category category;
     private String categoryNumber;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate categoryAssignmentDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate categoryAssignmentDeadlineDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate docsSubmitDeadlineDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate categoryPossiblePromotionDate;
 
     /// Course hours sum
@@ -50,7 +59,9 @@ public class Employee {
 
     /// Exemption
     private CertificationExemptionReason certificationExemptionReason;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate exemptionStartDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate exemptionEndDate;
     private boolean exemptioned;
 
@@ -58,8 +69,12 @@ public class Employee {
     private boolean active;
 
     /// Education
+    @NotNull(message = "A")
     private Education education;
+    @NotBlank(message = "B")
     private String eduName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @NotNull(message = "C")
     private LocalDate eduGraduationDate;
 
     public Employee() {
@@ -95,16 +110,29 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "employeeCategory=" + category +
+                "id=" + id +
+                ", foreignId=" + foreignId +
+                ", fullName='" + fullName + '\'' +
+                ", hiringDate=" + hiringDate +
+                ", jobFacility='" + jobFacility + '\'' +
+                ", position='" + position + '\'' +
+                ", qualification='" + qualification + '\'' +
+                ", category=" + category +
+                ", categoryNumber='" + categoryNumber + '\'' +
                 ", categoryAssignmentDate=" + categoryAssignmentDate +
                 ", categoryAssignmentDeadlineDate=" + categoryAssignmentDeadlineDate +
                 ", docsSubmitDeadlineDate=" + docsSubmitDeadlineDate +
                 ", categoryPossiblePromotionDate=" + categoryPossiblePromotionDate +
+                ", courseHoursSum=" + courseHoursSum +
+                ", courses=" + courses +
                 ", certificationExemptionReason=" + certificationExemptionReason +
                 ", exemptionStartDate=" + exemptionStartDate +
                 ", exemptionEndDate=" + exemptionEndDate +
                 ", exemptioned=" + exemptioned +
                 ", active=" + active +
+                ", education=" + education +
+                ", eduName='" + eduName + '\'' +
+                ", eduGraduationDate=" + eduGraduationDate +
                 '}';
     }
 
