@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 
 import { getEmployeeById } from "../services/employee.service";
+import { CategoryValidator as validateCategory } from "../helpers/CategoryValidator";
 import CoursesTable from "./CoursesTable";
 import { banana_color, green, red, sky_blue } from "../helpers/color";
 
@@ -19,8 +20,23 @@ const EmployeeView = (props) => {
     const [employee, setEmployee] = useState({});
     const [shownEducation, setShownEducation] = useState(false);
     const [shownExemption, setShownExemption] = useState(false);
+    const [categoryIsValid, setCategoryIsValid] = useState(false);
+    const [categoryButtonIsRed, setCategoryButtonIsRed] = useState(false);
 
     const history = useHistory();
+
+    const validateCat = useCallback(() => {
+        const tempErrors = validateCategory(
+            employee.qualification,
+            employee.category,
+            employee.categoryNumber,
+            employee.categoryAssignmentDate
+        );
+
+        setCategoryIsValid(
+            Object.values(tempErrors).every((item) => item === "")
+        );
+    }, [employee]);
 
     useEffect(() => {
         const fetchEmployee = () => {
@@ -31,6 +47,14 @@ const EmployeeView = (props) => {
 
         fetchEmployee();
     }, [id]);
+
+    useEffect(() => {
+        validateCat();
+    }, [validateCat]);
+
+    const makeCategoryButtonRed = () => {
+        setCategoryButtonIsRed(true);
+    };
 
     return (
         <div className="EmployeeView">
@@ -172,7 +196,13 @@ const EmployeeView = (props) => {
                         <CardActions className="card-actions">
                             <Button
                                 variant="outlined"
-                                style={{ fontWeight: "bold" }}
+                                style={{
+                                    fontWeight: "bold",
+                                    ...(categoryButtonIsRed && {
+                                        backgroundColor: red,
+                                        color: "white",
+                                    }),
+                                }}
                                 size="large"
                                 onClick={() => {
                                     history.push(
@@ -180,7 +210,7 @@ const EmployeeView = (props) => {
                                     );
                                 }}
                             >
-                                Edytuj
+                                {categoryIsValid ? "Edutyj" : "Podaj"}
                             </Button>
                         </CardActions>
                     </CardContent>
@@ -198,26 +228,47 @@ const EmployeeView = (props) => {
                         <div className="course-label">
                             <span>Suma godzin na kursach</span>
                         </div>
-                        <div className="add-course-btn">
-                            <Button
-                                variant="contained"
-                                startIcon={<AddIcon />}
-                                style={{
-                                    backgroundColor: sky_blue,
-                                    color: "black",
-                                    fontWeight: "bold",
-                                    height: "50px",
-                                    width: "200px",
-                                }}
-                                onClick={() => {
-                                    history.push({
-                                        pathname: `/employees/${id}/add-course`,
-                                        state: { employeeFullName: employee.fullName },
-                                    });
-                                }}
+                        <div
+                            onMouseEnter={
+                                !categoryIsValid
+                                    ? makeCategoryButtonRed
+                                    : () => {}
+                            }
+                        >
+                            <Tooltip
+                                title={
+                                    !categoryIsValid
+                                        ? "Aby dodać kurs, należy podać kategorię"
+                                        : ""
+                                }
+                                placement="bottom"
                             >
-                                Dodaj kurs
-                            </Button>
+                                <div className="add-course-btn">
+                                    <Button
+                                        variant="contained"
+                                        disabled={!categoryIsValid}
+                                        startIcon={<AddIcon />}
+                                        style={{
+                                            backgroundColor: sky_blue,
+                                            color: "black",
+                                            fontWeight: "bold",
+                                            height: "50px",
+                                            width: "200px",
+                                        }}
+                                        onClick={() => {
+                                            history.push({
+                                                pathname: `/employees/${id}/add-course`,
+                                                state: {
+                                                    employeeFullName:
+                                                        employee.fullName,
+                                                },
+                                            });
+                                        }}
+                                    >
+                                        Dodaj kurs
+                                    </Button>
+                                </div>
+                            </Tooltip>
                         </div>
                     </CardContent>
                 </Card>

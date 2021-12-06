@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import MyTextField from "./MyTextField";
 import MyDatePicker from "./MyDatePicker";
 import MenuItem from "@mui/material/MenuItem";
-import validator from "validator";
 
 import { useHistory } from "react-router-dom";
 
@@ -18,6 +17,7 @@ import {
 import { DateParser as parse } from "../helpers/DateParser";
 import { DateFormatter as format } from "../helpers/DateFormatter";
 import { FalseObjectChecker as isFalseObject } from "../helpers/FalseObjectChecker";
+import { CategoryValidator as validateCategory } from "../helpers/CategoryValidator";
 
 import { banana_color } from "../helpers/color";
 import "../css/Form.scss";
@@ -49,25 +49,12 @@ const EditCategory = (props) => {
     }, []);
 
     const validate = useCallback(() => {
-        let tempErrors = {};
-        tempErrors.qualification = qualification
-            ? ""
-            : "Należy podać kwalifikację";
-        tempErrors.category = !isFalseObject(category)
-            ? ""
-            : "Należy podać kategorię";
-        tempErrors.categoryNumber =
-            !isFalseObject(category) && category.name !== "NONE"
-                ? categoryNumber
-                    ? ""
-                    : "Należy podać numer kategorii"
-                : "";
-        tempErrors.categoryAssignmentDate =
-            !isFalseObject(category) && category.name !== "NONE"
-                ? validator.isDate(categoryAssignmentDate)
-                    ? ""
-                    : "Należy podać datę nadania kategorii"
-                : "";
+        const tempErrors = validateCategory(
+            qualification,
+            category,
+            categoryNumber,
+            categoryAssignmentDate
+        );
 
         setErrors(tempErrors);
 

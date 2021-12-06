@@ -49,7 +49,6 @@ export const patchEmployeeEducation = (id, patch) => {
 };
 
 export const patchEmployeeCategory = (id, patch) => {
-    console.log(patch);
     return patchEmployee(id, patch, "/category");
 };
 

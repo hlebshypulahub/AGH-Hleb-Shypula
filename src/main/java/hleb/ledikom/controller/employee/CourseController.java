@@ -31,7 +31,9 @@ public class CourseController {
     @PostMapping("for-employee/{id}")
     public Course addCourseToEmployee(@PathVariable Long id, @RequestBody Course course) {
         Employee employee = employeeDataService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist: id = " + id));
+
         courseService.addCourse(employee, course);
+
         return course;
     }
 }

@@ -4,6 +4,7 @@ import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.repository.CourseRepository;
 import hleb.ledikom.repository.EmployeeRepository;
+import hleb.ledikom.service.employee.EmployeeDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,23 @@ public class CourseService {
     CourseRepository courseRepository;
 
     @Autowired
+    EmployeeDataService employeeDataService;
+
+    @Autowired
     EmployeeRepository employeeRepository;
 
     public Course addCourse(Employee employee, Course course) {
-        employee.addCourse(course);
+        if (employeeDataService.categoryIsValid(employee)) {
+            employee.addCourse(course);
 
-        if (course.getStartDate().isAfter(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))) {
-            process(employee);
+            if (course.getStartDate().isAfter(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))) {
+                process(employee);
+            }
+
+            return courseRepository.save(course);
         }
 
-        return courseRepository.save(course);
+        return course;
     }
 
     public Employee process(Employee employee) {
