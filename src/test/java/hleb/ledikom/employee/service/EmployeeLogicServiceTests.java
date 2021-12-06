@@ -1,25 +1,36 @@
 package hleb.ledikom.employee.service;
 
-import hleb.ledikom.model.employee.*;
+import hleb.ledikom.model.employee.Category;
+import hleb.ledikom.model.employee.Course;
+import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.NotificationTerm;
 import hleb.ledikom.service.course.CourseService;
+import hleb.ledikom.service.employee.EmployeeDataService;
 import hleb.ledikom.service.employee.EmployeeLogicService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 public class EmployeeLogicServiceTests {
 
     @Autowired
     private EmployeeLogicService employeeLogicService;
+    @Autowired
+    private EmployeeDataService employeeDataService;
     @Autowired
     private CourseService courseService;
 
@@ -146,11 +157,14 @@ public class EmployeeLogicServiceTests {
         course.setHours(50);
         course.setStartDate(LocalDate.of(2022, 5, 5));
         course.setEndDate(LocalDate.of(2022, 5, 10));
-        employeeBeforeAct = courseService.addCourse(employeeBeforeAct, course);
+
+        employeeBeforeAct = employeeDataService.save(employeeBeforeAct);
+
+        courseService.addCourse(employeeBeforeAct, course);
 
         assertEquals(50, employeeBeforeAct.getCourseHoursSum());
 
-        employeeBeforeAct = employeeLogicService.setCategory(employeeBeforeAct, Category.HIGHEST, "Kat n. 430", LocalDate.of(2025, 5,5));
+        employeeBeforeAct = employeeLogicService.setCategory(employeeBeforeAct, Category.HIGHEST, "Kat n. 430", LocalDate.of(2025, 5, 5));
 
         assertEquals(0, employeeBeforeAct.getCourseHoursSum());
     }

@@ -1,7 +1,7 @@
 package hleb.ledikom.model.employee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -51,7 +51,8 @@ public class Employee {
 
     /// Courses
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIgnore
     private Set<Course> courses;
 
     /// Exemption
@@ -118,7 +119,7 @@ public class Employee {
                 ", docsSubmitDeadlineDate=" + docsSubmitDeadlineDate +
                 ", categoryPossiblePromotionDate=" + categoryPossiblePromotionDate +
                 ", courseHoursSum=" + courseHoursSum +
-                ", courses=" + courses +
+                ", courses quantity=" + courses.size() +
                 ", certificationExemptionReason=" + certificationExemptionReason +
                 ", exemptionStartDate=" + exemptionStartDate +
                 ", exemptionEndDate=" + exemptionEndDate +
@@ -137,14 +138,6 @@ public class Employee {
     public void addCourse(Course course) {
         course.setEmployee(this);
         this.courses.add(course);
-    }
-
-    public String getEduType() {
-        return education != null ? education.getLabel() : null;
-    }
-
-    public String getEduEnumName() {
-        return education != null ? education.name() : null;
     }
 
     public Long getId() {

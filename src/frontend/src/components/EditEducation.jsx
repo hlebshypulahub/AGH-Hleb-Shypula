@@ -2,52 +2,61 @@ import React, { useState, useEffect, useCallback } from "react";
 import MyTextField from "./MyTextField";
 import MyDatePicker from "./MyDatePicker";
 import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
 import validator from "validator";
 
 import { useHistory } from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+import FormButtons from "./FormButtons";
 
-import { getEducationValues } from "../services/education.service";
-import { getEmployeeById, patchEmployeeEducation } from "../services/employee.service";
+import { getEducations } from "../services/education.service";
+import {
+    getEmployeeById,
+    patchEmployeeEducation,
+} from "../services/employee.service";
+import { FalseObjectChecker as isFalseObject } from "../helpers/FalseObjectChecker";
 import { DateParser as parse } from "../helpers/DateParser";
 import { DateFormatter as format } from "../helpers/DateFormatter";
 
-import { banana_color, green, red } from "../helpers/color";
-import "../css/EditEducation.scss";
+import { banana_color } from "../helpers/color";
+import "../css/Form.scss";
 
 const EditEducation = (props) => {
     const id = props.match.params.id;
-    const [eduType, setEduType] = useState("");
-    const [eduTypes, setEduTypes] = useState([]);
+    const [education, setEducation] = useState({
+        label: "",
+        name: "",
+        requiredHoursNoneCategory: "",
+        requiredHours: "",
+    });
+    const [educations, setEducations] = useState([]);
     const [eduName, setEduName] = useState("");
+    const [fullName, setFullName] = useState("");
     const [eduGraduationDate, setEduGraduationDate] = useState({});
-    const [employee, setEmployee] = useState({});
     const [errors, setErrors] = useState({
-        eduType: "",
+        education: "",
         eduName: "",
-        eduGraduationDate: {},
+        eduGraduationDate: "",
     });
 
     const history = useHistory();
 
     useEffect(() => {
-        const fetchEducationValues = () => {
-            getEducationValues().then((data) => {
-                setEduTypes(data);
+        const fetchEducations = () => {
+            getEducations().then((data) => {
+                setEducations(data);
             });
         };
 
-        fetchEducationValues();
+        fetchEducations();
     }, []);
 
     const validate = useCallback(() => {
         let tempErrors = {};
-        tempErrors.eduType = eduType ? "" : "Należy podać rodzaj wykształcenia";
+        tempErrors.education = !isFalseObject(education)
+            ? ""
+            : "Należy podać rodzaj wykształcenia";
         tempErrors.eduName = eduName ? "" : "Należy podać nazwę szkoły";
         tempErrors.eduGraduationDate = validator.isDate(eduGraduationDate)
             ? ""
@@ -56,19 +65,19 @@ const EditEducation = (props) => {
         setErrors(tempErrors);
 
         return Object.values(tempErrors).every((item) => item === "");
-    }, [eduType, eduName, eduGraduationDate]);
+    }, [education, eduName, eduGraduationDate]);
 
     useEffect(() => {
         const fetchEmployee = () => {
             getEmployeeById(id).then((data) => {
-                setEmployee(data);
+                setFullName(data.fullName);
                 setEduGraduationDate(parse(data.eduGraduationDate));
                 setEduName(data.eduName);
-                setEduType(data.eduType);
+                setEducation(data.education);
             });
         };
 
-        fetchEmployee("fetchEmployee");
+        fetchEmployee();
     }, [id]);
 
     const handleSubmit = useCallback(
@@ -77,28 +86,23 @@ const EditEducation = (props) => {
 
             if (validate()) {
                 const patch = {
-                    eduName,
-                    eduGraduationDate: format(eduGraduationDate),
-                    education:
-                        eduType === "Wyższe"
-                            ? "HIGHER"
-                            : eduType === "Średnie"
-                            ? "SECONDARY"
-                            : null,
+                    ...(eduName && { eduName }),
+                    ...(eduGraduationDate && {
+                        eduGraduationDate: format(eduGraduationDate),
+                    }),
+                    ...(education && { education: education.name }),
                 };
 
-                patchEmployeeEducation(employee.id, patch).then(() => {
-                    history.push(`/employees/${employee.id}`);
+                patchEmployeeEducation(id, patch).then(() => {
+                    history.push(`/employees/${id}`);
                 });
-            } else {
-                return;
             }
         },
-        [eduName, eduGraduationDate, eduType, employee, history, validate]
+        [id, eduName, eduGraduationDate, education, history, validate]
     );
 
     useEffect(() => {
-        validate();
+            validate();
     }, [validate]);
 
     const onChangeEduName = (e) => {
@@ -106,13 +110,16 @@ const EditEducation = (props) => {
         setEduName(newName);
     };
 
-    const onChangeEduType = (e) => {
-        const newEduType = e.target.value;
-        setEduType(newEduType);
+    const onChangeEducation = (e) => {
+        const newEducationLabel = e.target.value;
+        const newEducation = educations.find(
+            (c) => c.label === newEducationLabel
+        );
+        setEducation(!isFalseObject(newEducation) ? newEducation : {});
     };
 
     const onChangeEduGraduationDate = (newEduGraduationDate) => {
-        if (newEduGraduationDate == null || newEduGraduationDate === undefined) {
+        if (!newEduGraduationDate) {
             setErrors({
                 ...errors,
                 eduGraduationDate: "Należy podać datę ukończenia stodiów",
@@ -122,7 +129,7 @@ const EditEducation = (props) => {
     };
 
     return (
-        <div className="EditEducation">
+        <div className="Form">
             <Card className="card">
                 <CardContent
                     className="card-content"
@@ -140,21 +147,19 @@ const EditEducation = (props) => {
                             <MyTextField
                                 disabled
                                 label="Imię i nazwisko"
-                                value={
-                                    employee.fullName ? employee.fullName : ""
-                                }
+                                value={fullName ? fullName : ""}
                             />
                         </div>
                         <div className="input text-field">
                             <MyTextField
-                                error={errors.eduType.length > 0}
-                                helperText={errors.eduType}
+                                error={errors.education.length > 0}
+                                helperText={errors.education}
                                 select
+                                value={education ? education.label : ""}
                                 label="Rodzaj"
-                                value={eduType ? eduType : ""}
-                                onChange={onChangeEduType}
+                                onChange={onChangeEducation}
                             >
-                                {eduTypes.map((type) => {
+                                {educations.map((type) => {
                                     return (
                                         <MenuItem
                                             key={type.name}
@@ -185,35 +190,7 @@ const EditEducation = (props) => {
                             />
                         </div>
                         <div className="buttons">
-                            <Button
-                                variant="contained"
-                                endIcon={<CancelIcon />}
-                                style={{
-                                    backgroundColor: red,
-                                    color: "white",
-                                    fontWeight: "bold",
-                                    height: "40px",
-                                }}
-                                onClick={() => {
-                                    history.goBack();
-                                }}
-                            >
-                                Anuluj
-                            </Button>
-                            <Button
-                                variant="contained"
-                                endIcon={<CheckCircleIcon />}
-                                style={{
-                                    marginLeft: "30px",
-                                    backgroundColor: green,
-                                    color: "white",
-                                    fontWeight: "bold",
-                                    height: "40px",
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                Zatwierdź
-                            </Button>
+                            <FormButtons />
                         </div>
                     </form>
                 </CardContent>

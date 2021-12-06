@@ -1,5 +1,8 @@
 package hleb.ledikom.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Category {
 
     HIGHEST("Wyższa"),
@@ -16,5 +19,13 @@ public enum Category {
     @Override
     public String toString() {
         return label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getName() {
+        return this.name();
     }
 }

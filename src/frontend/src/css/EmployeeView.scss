@@ -79,7 +79,8 @@
             }
 
             .course-label,
-            .course-hours {
+            .course-hours,
+            .add-course-btn {
                 color: white;
                 font-weight: 700;
                 position: absolute;
@@ -87,17 +88,22 @@
                 transform: translate(-50%, -50%);
             }
 
+            .add-course-btn {
+                left: 50%;
+                top: 75%;
+            }
+
             .course-hours {
                 font-size: 60px;
                 left: 50%;
-                top: 40%;
+                top: 30%;
             }
 
             .course-label {
                 width: 284px;
                 font-size: 24px;
                 left: 50%;
-                top: 65%;
+                top: 50%;
             }
         }
 

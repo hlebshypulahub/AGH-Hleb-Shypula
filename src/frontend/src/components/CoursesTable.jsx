@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import "../css/CoursesTable.scss";
 
+import { getEmployeeCourses } from "../services/course.service";
+
 const CoursesTable = (props) => {
-    const employee = props.employee;
+    const employeeId = props.employeeId;
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const fetchCourses = () => {
+            getEmployeeCourses(employeeId).then((data) => {
+                setCourses(data);
+            });
+        };
+
+        fetchCourses();
+    }, [employeeId]);
 
     const columns = [
         { field: "name", headerName: "Nazwa", width: 200 },
@@ -36,8 +49,8 @@ const CoursesTable = (props) => {
         },
     ];
 
-    const rows = employee.courses
-        ? employee.courses.map(
+    const rows = courses
+        ? courses.map(
               ({ id, name, description, hours, startDate, endDate }) => {
                   return {
                       id,

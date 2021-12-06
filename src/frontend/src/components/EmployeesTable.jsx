@@ -15,11 +15,11 @@ const EmployeesTable = (props) => {
         const fetchEmployees = () => {
             getEmployees().then((data) => {
                 setEmployees(data);
+                setLoading(false);
             });
         };
 
         fetchEmployees();
-        setLoading(false);
     }, []);
 
     const columns = [
@@ -153,14 +153,14 @@ const EmployeesTable = (props) => {
                       jobFacility,
                       position,
                       qualification,
-                      category,
+                      category: category ? category.label : "",
                       categoryNumber,
                       categoryAssignmentDate,
                       categoryAssignmentDeadlineDate,
                       docsSubmitDeadlineDate,
                       categoryPossiblePromotionDate,
                       courseHoursSum,
-                      education,
+                      education: education ? education.label : "",
                       eduName,
                       eduGraduationDate,
                   };

@@ -2,11 +2,10 @@ package hleb.ledikom.controller.employee;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatchException;
-import hleb.ledikom.model.employee.Course;
 import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.employee.dto.EmployeeCategoryPatchDto;
 import hleb.ledikom.model.employee.dto.EmployeeEducationPatchDto;
 import hleb.ledikom.service.employee.EmployeeDataService;
-import hleb.ledikom.service.employee.EmployeeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,6 @@ public class EmployeeController {
 
     @Autowired
     EmployeeDataService employeeDataService;
-
-    @Autowired
-    EmployeeValidationService employeeValidationService;
 
     @GetMapping("")
     public List<Employee> getEmployees() {
@@ -53,9 +49,14 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDataService.patch(id, employeeEducationPatchDto));
     }
 
-    @PostMapping("/{id}/courses")
-    public Employee addCourse(@PathVariable(name = "id") long employeeId, @RequestBody Course course) {
-        return employeeDataService.addCourse(course, employeeId);
+    @PatchMapping(path = "/{id}/category", consumes = "application/merge-patch+json")
+    public ResponseEntity<Employee> patchEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeCategoryPatchDto employeeCategoryPatchDto) throws JsonPatchException, JsonProcessingException {
+        return ResponseEntity.ok(employeeDataService.patch(id, employeeCategoryPatchDto));
     }
+
+//    @PostMapping("/{id}/courses")
+//    public Employee addCourse(@PathVariable(name = "id") long employeeId, @RequestBody Course course) {
+//        return employeeDataService.addCourse(course, employeeId);
+//    }
 
 }

@@ -5,12 +5,13 @@ import HomePage from "./HomePage";
 import EmployeesPage from "./EmployeesPage";
 import EmployeeView from "../components/EmployeeView";
 import EditEducation from "../components/EditEducation";
+import EditCategory from "../components/EditCategory";
+import AddCourse from "../components/AddCourse";
 import "../css/Dashboard.scss";
 import Button from "@mui/material/Button";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 import { yellow } from "../helpers/color";
-
 
 export const Dashboard = (props) => {
     const history = useHistory();
@@ -49,6 +50,14 @@ export const Dashboard = (props) => {
                 <Route
                     path="/employees/:id/edit-edu"
                     component={EditEducation}
+                />
+                <Route
+                    path="/employees/:id/edit-category"
+                    component={EditCategory}
+                />
+                <Route
+                    path="/employees/:id/add-course"
+                    component={AddCourse}
                 />
             </Switch>
         </div>

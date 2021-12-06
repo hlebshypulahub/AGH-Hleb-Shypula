@@ -1,5 +1,8 @@
 package hleb.ledikom.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Education {
     HIGHER("Wyższe", 100, 160),
     SECONDARY("Średnie", 50, 80);

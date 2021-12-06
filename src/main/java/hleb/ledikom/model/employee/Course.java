@@ -1,7 +1,7 @@
 package hleb.ledikom.model.employee;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
-    long id;
+    Long id;
 
     private String name;
     private String description;
@@ -25,10 +25,24 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonIgnore
     private Employee employee;
 
     public Course() {
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", hours=" + hours +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", employee=" + employee +
+                '}';
     }
 
     public String getName() {
@@ -79,11 +93,11 @@ public class Course {
         this.employee = employee;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

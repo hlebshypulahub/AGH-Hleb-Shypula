@@ -9,7 +9,6 @@ const MyDatePicker = ({ error, helperText, ...params }) => {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
                 {...params}
-                label="Data zakończenia"
                 mask="__.__.____"
                 inputFormat="dd.MM.yyyy"
                 inputProps={{

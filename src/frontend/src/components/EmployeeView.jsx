@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-// import CardFooter from "@mui/material/CardFooter";
 import Tooltip from "@mui/material/Tooltip";
 import Collapse from "@mui/material/Collapse";
 import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
+import AddIcon from "@mui/icons-material/Add";
 
 import { getEmployeeById } from "../services/employee.service";
 import CoursesTable from "./CoursesTable";
-import { banana_color, green, red } from "../helpers/color";
+import { banana_color, green, red, sky_blue } from "../helpers/color";
 
 import "../css/EmployeeView.scss";
 
@@ -94,7 +94,25 @@ const EmployeeView = (props) => {
                             backgroundColor: banana_color,
                         }}
                     >
-                        <span className="header-label">Kategoria</span>
+                        <div className="card-label">
+                            <span className="header-label">Kategoria</span>
+                            <span
+                                className="pin"
+                                style={
+                                    !employee.category
+                                        ? {
+                                              backgroundColor: red,
+                                          }
+                                        : {
+                                              backgroundColor: green,
+                                          }
+                                }
+                            >
+                                {!employee.category
+                                    ? "Należy podać"
+                                    : employee.category.label}
+                            </span>
+                        </div>
                         <div>
                             <span className="label-text-large">
                                 Kwalifikacja:
@@ -106,7 +124,11 @@ const EmployeeView = (props) => {
                         <div>
                             <span className="label-text-large">Kategoria:</span>
                             <span className="value-text">
-                                {employee.category}
+                                {employee
+                                    ? employee.category
+                                        ? employee.category.label
+                                        : ""
+                                    : ""}
                             </span>
                         </div>
                         <div>
@@ -152,6 +174,11 @@ const EmployeeView = (props) => {
                                 variant="outlined"
                                 style={{ fontWeight: "bold" }}
                                 size="large"
+                                onClick={() => {
+                                    history.push(
+                                        `/employees/${employee.id}/edit-category`
+                                    );
+                                }}
                             >
                                 Edytuj
                             </Button>
@@ -165,11 +192,32 @@ const EmployeeView = (props) => {
                             backgroundColor: "#DA5987",
                         }}
                     >
+                        <div className="course-hours">
+                            <span>{employee.courseHoursSum}</span>
+                        </div>
                         <div className="course-label">
                             <span>Suma godzin na kursach</span>
                         </div>
-                        <div className="course-hours">
-                            <span>{employee.courseHoursSum}</span>
+                        <div className="add-course-btn">
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                style={{
+                                    backgroundColor: sky_blue,
+                                    color: "black",
+                                    fontWeight: "bold",
+                                    height: "50px",
+                                    width: "200px",
+                                }}
+                                onClick={() => {
+                                    history.push({
+                                        pathname: `/employees/${id}/add-course`,
+                                        state: { employeeFullName: employee.fullName },
+                                    });
+                                }}
+                            >
+                                Dodaj kurs
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -189,12 +237,36 @@ const EmployeeView = (props) => {
                                 backgroundColor: banana_color,
                             }}
                         >
-                            <span className="header-label">Wykształcenie</span>
+                            <div className="card-label">
+                                <span className="header-label">
+                                    Wykształcenie
+                                </span>
+                                <span
+                                    className="pin"
+                                    style={
+                                        !employee.education
+                                            ? {
+                                                  backgroundColor: red,
+                                              }
+                                            : {
+                                                  backgroundColor: green,
+                                              }
+                                    }
+                                >
+                                    {!employee.education
+                                        ? "Należy podać"
+                                        : employee.education.label}
+                                </span>
+                            </div>
                             <Collapse in={shownEducation} timeout={700}>
                                 <div className="info-row">
                                     <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
-                                        {employee.eduType}
+                                        {employee
+                                            ? employee.education
+                                                ? employee.education.label
+                                                : ""
+                                            : ""}
                                     </span>
                                 </div>
                                 <div className="info-row">
@@ -309,7 +381,7 @@ const EmployeeView = (props) => {
                     </Card>
                 </Tooltip>
             </div>
-            <CoursesTable employee={employee} />
+            <CoursesTable employeeId={id} />
         </div>
     );
 };
