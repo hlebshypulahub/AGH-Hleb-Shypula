@@ -22,8 +22,16 @@ public class CourseService {
     @Autowired
     EmployeeRepository employeeRepository;
 
-    public Course addCourse(Employee employee, Course course) {
-        if (employeeDataService.categoryIsValid(employee)) {
+    public void addCourseForEmployee(Employee employee, Course course) {
+        addCourse(employee, course);
+    }
+
+    public Course addCourseForEmployee(Long employeeId, Course course) {
+        return addCourse(employeeDataService.findById(employeeId), course);
+    }
+
+    private Course addCourse(Employee employee, Course course) {
+        if (employeeDataService.categoryIsValid(employee) && employeeDataService.educationIsValid(employee)) {
             employee.addCourse(course);
 
             if (course.getStartDate().isAfter(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))) {

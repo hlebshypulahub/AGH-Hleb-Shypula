@@ -10,6 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { getEmployeeById } from "../services/employee.service";
 import { CategoryValidator as validateCategory } from "../helpers/CategoryValidator";
+import { EducationValidator as validateEducation } from "../helpers/EducationValidator";
+import { DateParser as parse } from "../helpers/DateParser";
 import CoursesTable from "./CoursesTable";
 import { banana_color, green, red, sky_blue } from "../helpers/color";
 
@@ -21,7 +23,8 @@ const EmployeeView = (props) => {
     const [shownEducation, setShownEducation] = useState(false);
     const [shownExemption, setShownExemption] = useState(false);
     const [categoryIsValid, setCategoryIsValid] = useState(false);
-    const [categoryButtonIsRed, setCategoryButtonIsRed] = useState(false);
+    const [educationIsValid, setEducationIsValid] = useState(false);
+    const [buttonIsRed, setButtonIsRed] = useState(false);
 
     const history = useHistory();
 
@@ -30,10 +33,22 @@ const EmployeeView = (props) => {
             employee.qualification,
             employee.category,
             employee.categoryNumber,
-            employee.categoryAssignmentDate
+            parse(employee.categoryAssignmentDate)
         );
 
         setCategoryIsValid(
+            Object.values(tempErrors).every((item) => item === "")
+        );
+    }, [employee]);
+
+    const validateEdu = useCallback(() => {
+        const tempErrors = validateEducation(
+            employee.education,
+            employee.eduName,
+            parse(employee.eduGraduationDate)
+        );
+
+        setEducationIsValid(
             Object.values(tempErrors).every((item) => item === "")
         );
     }, [employee]);
@@ -52,8 +67,12 @@ const EmployeeView = (props) => {
         validateCat();
     }, [validateCat]);
 
-    const makeCategoryButtonRed = () => {
-        setCategoryButtonIsRed(true);
+    useEffect(() => {
+        validateEdu();
+    }, [validateEdu]);
+
+    const makeButtonRed = () => {
+        setButtonIsRed(true);
     };
 
     return (
@@ -198,7 +217,7 @@ const EmployeeView = (props) => {
                                 variant="outlined"
                                 style={{
                                     fontWeight: "bold",
-                                    ...(categoryButtonIsRed && {
+                                    ...((buttonIsRed && !categoryIsValid) && {
                                         backgroundColor: red,
                                         color: "white",
                                     }),
@@ -230,15 +249,15 @@ const EmployeeView = (props) => {
                         </div>
                         <div
                             onMouseEnter={
-                                !categoryIsValid
-                                    ? makeCategoryButtonRed
+                                !categoryIsValid || !educationIsValid
+                                    ? makeButtonRed
                                     : () => {}
                             }
                         >
                             <Tooltip
                                 title={
-                                    !categoryIsValid
-                                        ? "Aby dodać kurs, należy podać kategorię"
+                                    !categoryIsValid || !educationIsValid
+                                        ? "Aby dodać kurs, należy podać kategorię oraz wykształcenie"
                                         : ""
                                 }
                                 placement="bottom"
@@ -246,7 +265,10 @@ const EmployeeView = (props) => {
                                 <div className="add-course-btn">
                                     <Button
                                         variant="contained"
-                                        disabled={!categoryIsValid}
+                                        disabled={
+                                            !categoryIsValid ||
+                                            !educationIsValid
+                                        }
                                         startIcon={<AddIcon />}
                                         style={{
                                             backgroundColor: sky_blue,
@@ -275,7 +297,7 @@ const EmployeeView = (props) => {
             </div>
             <div className="second-row">
                 <Tooltip
-                    title={shownEducation ? "" : "Kliknuj, aby rozwinąć"}
+                    title={shownEducation || buttonIsRed ? "" : "Kliknuj, aby rozwinąć"}
                     followCursor
                 >
                     <Card
@@ -309,7 +331,7 @@ const EmployeeView = (props) => {
                                         : employee.education.label}
                                 </span>
                             </div>
-                            <Collapse in={shownEducation} timeout={700}>
+                            <Collapse in={shownEducation || buttonIsRed} timeout={600}>
                                 <div className="info-row">
                                     <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
@@ -337,7 +359,13 @@ const EmployeeView = (props) => {
                                 <CardActions className="card-actions">
                                     <Button
                                         variant="outlined"
-                                        style={{ fontWeight: "bold" }}
+                                        style={{
+                                            fontWeight: "bold",
+                                            ...((buttonIsRed && !educationIsValid) && {
+                                                backgroundColor: red,
+                                                color: "white",
+                                            }),
+                                        }}
                                         size="large"
                                         onClick={() => {
                                             history.push(
@@ -345,7 +373,7 @@ const EmployeeView = (props) => {
                                             );
                                         }}
                                     >
-                                        Edytuj
+                                        {educationIsValid ? "Edytuj" : "Podaj"}
                                     </Button>
                                 </CardActions>
                             </Collapse>
@@ -390,7 +418,7 @@ const EmployeeView = (props) => {
                                 </span>
                             </div>
                             {employee.exemptioned && (
-                                <Collapse in={shownExemption} timeout={700}>
+                                <Collapse in={shownExemption} timeout={600}>
                                     <div className="info-row">
                                         <span className="label-text">
                                             Przyczyna:

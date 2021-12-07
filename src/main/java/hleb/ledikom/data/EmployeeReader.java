@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -22,14 +24,17 @@ public class EmployeeReader {
 
     Logger logger = LoggerFactory.getLogger(EmployeeReader.class);
 
-//    @Scheduled(cron = "0 0 21 * * *")
+    //    @Scheduled(cron = "0 0 21 * * *")
     /// "0 0 6 * * *" every day 6 a.m.
     /// "0 * * * * *" every minute
+    @PostConstruct
     public void readAndFillData() throws FileNotFoundException, URISyntaxException {
         String filePath = "C:" + File.separator + "Users" + File.separator + "hlebs" + File.separator + "Desktop" + File.separator + "Ledikom" + File.separator + "employee_data.csv";
         Path path = Paths.get(filePath);
 
         try (BufferedReader br = new BufferedReader(new FileReader(path.toFile()))) {
+
+            logger.info("Reading employees data file");
 
             String line = br.readLine();
 
@@ -44,6 +49,8 @@ public class EmployeeReader {
                     employee.setHiringDate(LocalDate.parse(employeeAttributes[2], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                     employee.setJobFacility(employeeAttributes[3]);
                     employee.setPosition(employeeAttributes[4]);
+                    employee.setExemptioned(false);
+                    employee.setActive(true);
 
                     employeeRepository.save(employee);
 
@@ -52,10 +59,8 @@ public class EmployeeReader {
 
                 line = br.readLine();
             }
-
-            logger.info("Reading employee data");
         } catch (IOException ioe) {
-            logger.error("Cannot read a file");
+            logger.error("Cannot read a file with employees data");
             ioe.printStackTrace();
         }
     }

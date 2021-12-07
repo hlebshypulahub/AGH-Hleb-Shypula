@@ -37,6 +37,8 @@ public class CourseServiceTests {
     public void before() {
         employee = new Employee();
         employee.setCategory(Category.FIRST);
+        employee.setQualification("Farmaceuta");
+        employee.setCategoryNumber("543");
         employee.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
 
         employee.setCourses(new HashSet<>());
@@ -58,7 +60,7 @@ public class CourseServiceTests {
         course.setStartDate(LocalDate.of(2019, 5, 5));
         course.setEndDate(LocalDate.of(2019, 5, 10));
 
-        courseService.addCourse(employee, course);
+        courseService.addCourseForEmployee(employee, course);
 
         assertEquals(0, employee.getCourseHoursSum());
     }
@@ -70,7 +72,7 @@ public class CourseServiceTests {
         course.setStartDate(LocalDate.of(2022, 5, 5));
         course.setEndDate(LocalDate.of(2022, 5, 10));
 
-        courseService.addCourse(employee, course);
+        courseService.addCourseForEmployee(employee, course);
 
         assertEquals(50, employee.getCourseHoursSum());
     }
@@ -83,13 +85,13 @@ public class CourseServiceTests {
         course1.setHours(50);
         course1.setStartDate(LocalDate.of(2022, 5, 5));
         course1.setEndDate(LocalDate.of(2022, 5, 10));
-        courseService.addCourse(employee, course1);
+        courseService.addCourseForEmployee(employee, course1);
 
         Course course2 = new Course();
         course2.setHours(60);
         course2.setStartDate(LocalDate.of(2023, 5, 5));
         course2.setEndDate(LocalDate.of(2023, 5, 10));
-        courseService.addCourse(employee, course2);
+        courseService.addCourseForEmployee(employee, course2);
 
         assertEquals(110, employee.getCourseHoursSum());
     }

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import MyTextField from "./MyTextField";
 import MyDatePicker from "./MyDatePicker";
 import MenuItem from "@mui/material/MenuItem";
-import validator from "validator";
 
 import { useHistory } from "react-router-dom";
 
@@ -15,6 +14,7 @@ import {
     getEmployeeById,
     patchEmployeeEducation,
 } from "../services/employee.service";
+import { EducationValidator as validateEducation } from "../helpers/EducationValidator";
 import { FalseObjectChecker as isFalseObject } from "../helpers/FalseObjectChecker";
 import { DateParser as parse } from "../helpers/DateParser";
 import { DateFormatter as format } from "../helpers/DateFormatter";
@@ -53,14 +53,11 @@ const EditEducation = (props) => {
     }, []);
 
     const validate = useCallback(() => {
-        let tempErrors = {};
-        tempErrors.education = !isFalseObject(education)
-            ? ""
-            : "Należy podać rodzaj wykształcenia";
-        tempErrors.eduName = eduName ? "" : "Należy podać nazwę szkoły";
-        tempErrors.eduGraduationDate = validator.isDate(eduGraduationDate)
-            ? ""
-            : "Należy podać datę ukończenia stodiów";
+        const tempErrors = validateEducation(
+            education,
+            eduName,
+            eduGraduationDate
+        );
 
         setErrors(tempErrors);
 
@@ -102,7 +99,7 @@ const EditEducation = (props) => {
     );
 
     useEffect(() => {
-            validate();
+        validate();
     }, [validate]);
 
     const onChangeEduName = (e) => {

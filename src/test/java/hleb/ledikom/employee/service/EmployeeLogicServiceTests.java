@@ -43,6 +43,8 @@ public class EmployeeLogicServiceTests {
         /// Employee with category assigned before act
         employeeBeforeAct = new Employee();
         employeeBeforeAct.setCategory(Category.FIRST);
+        employeeBeforeAct.setCategoryNumber("543");
+        employeeBeforeAct.setQualification("Farmaceuta");
         employeeBeforeAct.setCategoryAssignmentDate(LocalDate.of(2020, 5, 5));
 
         employeeBeforeAct.setCourses(new HashSet<>());
@@ -52,6 +54,8 @@ public class EmployeeLogicServiceTests {
         /// Employee with category assigned after act
         employeeAfterAct = new Employee();
         employeeAfterAct.setCategory(Category.HIGHEST);
+        employeeAfterAct.setQualification("Farmaceuta");
+        employeeAfterAct.setCategoryNumber("543");
         employeeAfterAct.setCategoryAssignmentDate(LocalDate.of(2022, 3, 15));
         employeeAfterAct = employeeLogicService.process(employeeAfterAct);
 
@@ -160,7 +164,7 @@ public class EmployeeLogicServiceTests {
 
         employeeBeforeAct = employeeDataService.save(employeeBeforeAct);
 
-        courseService.addCourse(employeeBeforeAct, course);
+        courseService.addCourseForEmployee(employeeBeforeAct, course);
 
         assertEquals(50, employeeBeforeAct.getCourseHoursSum());
 
