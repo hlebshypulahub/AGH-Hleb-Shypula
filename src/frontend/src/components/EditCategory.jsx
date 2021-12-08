@@ -186,6 +186,7 @@ const EditCategory = (props) => {
                         </div>
                         <div className="input text-field">
                             <MyTextField
+                                disabled={category && category.name === "NONE"}
                                 error={errors.categoryNumber.length > 0}
                                 helperText={errors.categoryNumber}
                                 label="Numer"
@@ -195,6 +196,7 @@ const EditCategory = (props) => {
                         </div>
                         <div className="input text-field">
                             <MyDatePicker
+                                disabled={category && category.name === "NONE"}
                                 error={errors.categoryAssignmentDate.length > 0}
                                 helperText={errors.categoryAssignmentDate.toString()}
                                 label="Data nadania"

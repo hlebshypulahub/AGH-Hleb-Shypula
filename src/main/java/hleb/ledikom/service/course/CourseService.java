@@ -8,6 +8,7 @@ import hleb.ledikom.service.employee.EmployeeDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -31,26 +32,22 @@ public class CourseService {
     }
 
     private Course addCourse(Employee employee, Course course) {
+        employee.addCourse(course);
+
         if (employeeDataService.categoryIsValid(employee) && employeeDataService.educationIsValid(employee)) {
-            employee.addCourse(course);
-
-            if (course.getStartDate().isAfter(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))) {
-                process(employee);
-            }
-
-            return courseRepository.save(course);
+            process(employee);
         }
 
-        return course;
+        return courseRepository.save(course);
     }
 
-    public Employee process(Employee employee) {
+    public Employee process(@Valid Employee employee) {
         employee.setCourseHoursSum(employee.getCourses().stream().filter(course ->
-                course.getStartDate().isAfter(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))
-                        && course.getStartDate().isBefore(employee.getCategoryAssignmentDeadlineDate())
+                !course.getStartDate().isBefore(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))
+                        && course.getEndDate().isBefore(employee.getCategoryAssignmentDeadlineDate())
         ).mapToInt(Course::getHours).sum());
 
-        return employee;
+        return employeeDataService.save(employee);
     }
 
     public List<Course> getCoursesForEmployee(Long employeeId) {

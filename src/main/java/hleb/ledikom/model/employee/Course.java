@@ -2,11 +2,16 @@ package hleb.ledikom.model.employee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hleb.ledikom.validator.StartDateBeforeEndDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@StartDateBeforeEndDate
 public class Course {
 
     @Id
@@ -14,12 +19,16 @@ public class Course {
     @Column(columnDefinition = "serial")
     Long id;
 
+    @NotBlank(message = "Course name cannot be blank")
     private String name;
     private String description;
+    @Min(value = 1, message = "Course hours must be greater than 0")
     private int hours;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @NotNull(message = "Course startDate cannot be null")
     private LocalDate startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @NotNull(message = "Course endDate cannot be null")
     private LocalDate endDate;
 
 

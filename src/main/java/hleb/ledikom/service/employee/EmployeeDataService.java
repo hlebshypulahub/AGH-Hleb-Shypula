@@ -1,6 +1,5 @@
 package hleb.ledikom.service.employee;
 
-import hleb.ledikom.exception.CategoryNotValidException;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.employee.dto.EmployeeCategoryPatchDto;
 import hleb.ledikom.model.employee.dto.EmployeeEducationPatchDto;
@@ -23,6 +22,9 @@ public class EmployeeDataService {
     EmployeeRepository employeeRepository;
 
     @Autowired
+    EmployeeLogicService employeeLogicService;
+
+    @Autowired
     private Validator validator;
 
     public List<Employee> getEmployees() {
@@ -40,6 +42,11 @@ public class EmployeeDataService {
     public Employee patch(Long id, EmployeePatchDto employeePatchDto) {
         Employee employee = findById(id);
         BeanUtils.copyProperties(employeePatchDto, employee);
+
+        if (employeePatchDto instanceof EmployeeCategoryPatchDto && educationIsValid(employee)) {
+            employee = employeeLogicService.processCategory(employee);
+        }
+
         return save(employee);
     }
 
@@ -47,22 +54,14 @@ public class EmployeeDataService {
         EmployeeCategoryPatchDto employeeCategoryPatchDto = new EmployeeCategoryPatchDto();
         BeanUtils.copyProperties(employee, employeeCategoryPatchDto);
         Set<ConstraintViolation<EmployeeCategoryPatchDto>> violations = validator.validate(employeeCategoryPatchDto);
-        if (violations.size() != 0) {
-            throw new CategoryNotValidException("Category is not valid to add course");
-        }
-
-        return true;
+        return violations.size() == 0;
     }
 
     public boolean educationIsValid(Employee employee) {
         EmployeeEducationPatchDto employeeEducationPatchDto = new EmployeeEducationPatchDto();
         BeanUtils.copyProperties(employee, employeeEducationPatchDto);
         Set<ConstraintViolation<EmployeeEducationPatchDto>> violations = validator.validate(employeeEducationPatchDto);
-        if (violations.size() != 0) {
-            throw new CategoryNotValidException("Education is not valid to add course");
-        }
-
-        return true;
+        return violations.size() == 0;
     }
 
 }

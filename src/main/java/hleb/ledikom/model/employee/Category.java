@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Category {
 
-    HIGHEST("Wyższa"),
-    FIRST("Pierwsza"),
+    NONE("Brak"),
     SECOND("Druga"),
-    NONE("Brak");
+    FIRST("Pierwsza"),
+    HIGHEST("Wyższa");
 
     private final String label;
 

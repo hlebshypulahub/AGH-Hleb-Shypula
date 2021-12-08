@@ -2,17 +2,21 @@ package hleb.ledikom.model.employee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hleb.ledikom.validator.CategoryDatesNotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@CategoryDatesNotNull
 public class Employee {
     @Transient
     public static final LocalDate ACT_ENTRY_INTO_FORCE_DATE = LocalDate.of(2021, 7, 23);
     @Transient
-    public static final int CATEGORY_POSSIBLE_PROMOTION_YEARS = 3;
+    public static final int WORK_EXPIRIANCE_TO_CATEGORY_PROMOTION_YEARS = 3;
     @Transient
     public static final int CATEGORY_VERIFICATION_YEARS = 5;
     @Transient
@@ -24,13 +28,18 @@ public class Employee {
     Long id;
 
     /// Id from accounting app
+    @NotNull(message = "foreignId cannot be null")
     long foreignId;
 
     /// Main info
+    @NotBlank(message = "fullName cannot be blank")
     private String fullName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @NotNull(message = "hiringDate cannot be null")
     private LocalDate hiringDate;
+    /// ????????????????????????????????? validate
     private String jobFacility;
+    @NotBlank(message = "position cannot be blank")
     private String position;
 
     /// Category
@@ -50,7 +59,7 @@ public class Employee {
     private int courseHoursSum;
 
     /// Courses
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
 //    @JsonManagedReference
     @JsonIgnore
     private Set<Course> courses;

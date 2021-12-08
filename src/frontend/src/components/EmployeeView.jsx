@@ -213,24 +213,38 @@ const EmployeeView = (props) => {
                             </span>
                         </div>
                         <CardActions className="card-actions">
-                            <Button
-                                variant="outlined"
-                                style={{
-                                    fontWeight: "bold",
-                                    ...((buttonIsRed && !categoryIsValid) && {
-                                        backgroundColor: red,
-                                        color: "white",
-                                    }),
-                                }}
-                                size="large"
-                                onClick={() => {
-                                    history.push(
-                                        `/employees/${employee.id}/edit-category`
-                                    );
-                                }}
+                            <Tooltip
+                                title={
+                                    !educationIsValid
+                                        ? "Najpierw należy podać wykształcenie"
+                                        : ""
+                                }
+                                placement="right"
                             >
-                                {categoryIsValid ? "Edutyj" : "Podaj"}
-                            </Button>
+                                <div>
+                                    <Button
+                                        disabled={!educationIsValid}
+                                        variant="outlined"
+                                        style={{
+                                            fontWeight: "bold",
+                                            ...(buttonIsRed &&
+                                                !categoryIsValid &&
+                                                educationIsValid && {
+                                                    backgroundColor: red,
+                                                    color: "white",
+                                                }),
+                                        }}
+                                        size="large"
+                                        onClick={() => {
+                                            history.push(
+                                                `/employees/${employee.id}/edit-category`
+                                            );
+                                        }}
+                                    >
+                                        {categoryIsValid ? "Edutyj" : "Podaj"}
+                                    </Button>
+                                </div>
+                            </Tooltip>
                         </CardActions>
                     </CardContent>
                 </Card>
@@ -247,7 +261,7 @@ const EmployeeView = (props) => {
                         <div className="course-label">
                             <span>Suma godzin na kursach</span>
                         </div>
-                        <div
+                        {/* <div
                             onMouseEnter={
                                 !categoryIsValid || !educationIsValid
                                     ? makeButtonRed
@@ -257,47 +271,47 @@ const EmployeeView = (props) => {
                             <Tooltip
                                 title={
                                     !categoryIsValid || !educationIsValid
-                                        ? "Aby dodać kurs, należy podać kategorię oraz wykształcenie"
+                                        ? "Aby dodać kurs, należy podać wykształcenie oraz kategorię"
                                         : ""
                                 }
                                 placement="bottom"
+                            > */}
+                        <div className="add-course-btn">
+                            <Button
+                                variant="contained"
+                                // disabled={!categoryIsValid || !educationIsValid}
+                                startIcon={<AddIcon />}
+                                style={{
+                                    backgroundColor: sky_blue,
+                                    color: "black",
+                                    fontWeight: "bold",
+                                    height: "50px",
+                                    width: "200px",
+                                }}
+                                onClick={() => {
+                                    history.push({
+                                        pathname: `/employees/${id}/add-course`,
+                                        state: {
+                                            employeeFullName: employee.fullName,
+                                        },
+                                    });
+                                }}
                             >
-                                <div className="add-course-btn">
-                                    <Button
-                                        variant="contained"
-                                        disabled={
-                                            !categoryIsValid ||
-                                            !educationIsValid
-                                        }
-                                        startIcon={<AddIcon />}
-                                        style={{
-                                            backgroundColor: sky_blue,
-                                            color: "black",
-                                            fontWeight: "bold",
-                                            height: "50px",
-                                            width: "200px",
-                                        }}
-                                        onClick={() => {
-                                            history.push({
-                                                pathname: `/employees/${id}/add-course`,
-                                                state: {
-                                                    employeeFullName:
-                                                        employee.fullName,
-                                                },
-                                            });
-                                        }}
-                                    >
-                                        Dodaj kurs
-                                    </Button>
-                                </div>
-                            </Tooltip>
+                                Dodaj kurs
+                            </Button>
                         </div>
+                        {/* </Tooltip>
+                        </div> */}
                     </CardContent>
                 </Card>
             </div>
             <div className="second-row">
                 <Tooltip
-                    title={shownEducation || buttonIsRed ? "" : "Kliknuj, aby rozwinąć"}
+                    title={
+                        shownEducation || buttonIsRed
+                            ? ""
+                            : "Kliknuj, aby rozwinąć"
+                    }
                     followCursor
                 >
                     <Card
@@ -331,7 +345,13 @@ const EmployeeView = (props) => {
                                         : employee.education.label}
                                 </span>
                             </div>
-                            <Collapse in={shownEducation || buttonIsRed} timeout={600}>
+                            <Collapse
+                                in={
+                                    shownEducation ||
+                                    (buttonIsRed && !educationIsValid)
+                                }
+                                timeout={600}
+                            >
                                 <div className="info-row">
                                     <span className="label-text">Rodzaj:</span>
                                     <span className="value-text">
@@ -361,10 +381,11 @@ const EmployeeView = (props) => {
                                         variant="outlined"
                                         style={{
                                             fontWeight: "bold",
-                                            ...((buttonIsRed && !educationIsValid) && {
-                                                backgroundColor: red,
-                                                color: "white",
-                                            }),
+                                            ...(buttonIsRed &&
+                                                !educationIsValid && {
+                                                    backgroundColor: red,
+                                                    color: "white",
+                                                }),
                                         }}
                                         size="large"
                                         onClick={() => {

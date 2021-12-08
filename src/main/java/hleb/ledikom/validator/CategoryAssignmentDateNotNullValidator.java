@@ -6,7 +6,7 @@ import hleb.ledikom.model.employee.dto.EmployeeCategoryPatchDto;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class NotNullDependingOnCategoryValidator implements ConstraintValidator<CategoryAssignmentDateNotNull, EmployeeCategoryPatchDto> {
+public class CategoryAssignmentDateNotNullValidator implements ConstraintValidator<CategoryAssignmentDateNotNull, EmployeeCategoryPatchDto> {
 
     @Override
     public void initialize(CategoryAssignmentDateNotNull constraintAnnotation) {

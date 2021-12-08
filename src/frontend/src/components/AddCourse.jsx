@@ -48,6 +48,10 @@ const AddCourse = (props) => {
             ? ""
             : "Należy podać datę końca kursu";
 
+        if(endDate < startDate) {
+            tempErrors.endDate = "Data końca kursu powinna być wcześniej niż data początku"
+        }
+
         setErrors(tempErrors);
 
         return Object.values(tempErrors).every((item) => item === "");
@@ -160,6 +164,7 @@ const AddCourse = (props) => {
                             <MyTextField
                                 error={errors.hours.length > 0}
                                 helperText={errors.hours}
+                                pattern="[0-9]*"
                                 label="Ilość godzin"
                                 value={hours}
                                 onChange={onChangeHours}

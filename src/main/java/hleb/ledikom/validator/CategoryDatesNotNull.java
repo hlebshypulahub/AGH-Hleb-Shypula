@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {CategoryAssignmentDateNotNullValidator.class})
-public @interface CategoryAssignmentDateNotNull {
-    String message() default "CategoryAssignmentDateNotNull constraint violation";
+@Constraint(validatedBy = {CategoryDatesNotNullValidator.class})
+public @interface CategoryDatesNotNull {
+    String message() default "CategoryDatesNotNull constraint violation";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
