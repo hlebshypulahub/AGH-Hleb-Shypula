@@ -1,34 +1,46 @@
 package hleb.ledikom.service.employee;
 
+import hleb.ledikom.exception.CategoryNotValidException;
+import hleb.ledikom.exception.EducationNotValidException;
 import hleb.ledikom.model.employee.Employee;
-import hleb.ledikom.model.employee.dto.EmployeeCategoryPatchDto;
-import hleb.ledikom.model.employee.dto.EmployeeEducationPatchDto;
-import hleb.ledikom.model.employee.dto.EmployeePatchDto;
+import hleb.ledikom.model.employee.dto.*;
 import hleb.ledikom.repository.EmployeeRepository;
+import hleb.ledikom.service.course.CourseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class EmployeeDataService {
 
-    @Autowired
-    EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+    private final CourseService courseService;
+    private final EmployeeValidationService employeeValidationService;
+    private final EmployeeExemptionService employeeExemptionService;
+    private final EmployeeFilteringService employeeFilteringService;
+    private final EmployeeCategoryService employeeCategoryService;
 
     @Autowired
-    EmployeeLogicService employeeLogicService;
+    public EmployeeDataService(EmployeeRepository employeeRepository, CourseService courseService,
+                               EmployeeValidationService employeeValidationService, EmployeeExemptionService employeeExemptionService,
+                               EmployeeFilteringService employeeFilteringService, EmployeeCategoryService employeeCategoryService) {
+        this.employeeRepository = employeeRepository;
+        this.courseService = courseService;
+        this.employeeValidationService = employeeValidationService;
+        this.employeeExemptionService = employeeExemptionService;
+        this.employeeFilteringService = employeeFilteringService;
+        this.employeeCategoryService = employeeCategoryService;
+    }
 
-    @Autowired
-    private Validator validator;
-
-    public List<Employee> getEmployees() {
+    public List<Employee> getAll() {
         return employeeRepository.findAll();
+    }
+
+    public List<Employee> getAllForCoursePlan() {
+        return employeeFilteringService.filterForCoursePlan(employeeRepository.findAll());
     }
 
     public Employee findById(long id) {
@@ -41,27 +53,61 @@ public class EmployeeDataService {
 
     public Employee patch(Long id, EmployeePatchDto employeePatchDto) {
         Employee employee = findById(id);
-        BeanUtils.copyProperties(employeePatchDto, employee);
-
-        if (employeePatchDto instanceof EmployeeCategoryPatchDto && educationIsValid(employee)) {
-            employee = employeeLogicService.processCategory(employee);
-        }
-
+        patch(employee, employeePatchDto);
         return save(employee);
     }
 
-    public boolean categoryIsValid(Employee employee) {
-        EmployeeCategoryPatchDto employeeCategoryPatchDto = new EmployeeCategoryPatchDto();
-        BeanUtils.copyProperties(employee, employeeCategoryPatchDto);
-        Set<ConstraintViolation<EmployeeCategoryPatchDto>> violations = validator.validate(employeeCategoryPatchDto);
-        return violations.size() == 0;
+    private void patch(Employee employee, EmployeePatchDto employeePatchDto) {
+        if (!employee.isExemptioned()) {
+            if (employeePatchDto instanceof EmployeeCategoryPatchDto) {
+                patchCategory(employee, employeePatchDto);
+            } else if (employeePatchDto instanceof EmployeeCategoryDeadlinePatchDto) {
+                patchCategoryDeadline(employee, employeePatchDto);
+            }
+        }
+
+        if (employeePatchDto instanceof EmployeeExemptionPatchDto) {
+            patchEmployeeExemption(employee, employeePatchDto);
+        } else if (employeePatchDto instanceof EmployeeEducationPatchDto) {
+            patchEmployeeEducation(employee, employeePatchDto);
+        } else if (employeePatchDto instanceof EmployeeActivePatchDto) {
+            patchEmployeeActive(employee, employeePatchDto);
+        }
     }
 
-    public boolean educationIsValid(Employee employee) {
-        EmployeeEducationPatchDto employeeEducationPatchDto = new EmployeeEducationPatchDto();
-        BeanUtils.copyProperties(employee, employeeEducationPatchDto);
-        Set<ConstraintViolation<EmployeeEducationPatchDto>> violations = validator.validate(employeeEducationPatchDto);
-        return violations.size() == 0;
+    private void patchCategory(Employee employee, EmployeePatchDto employeePatchDto) {
+        if (!employeeValidationService.educationIsValid(employee)) {
+            throw new EducationNotValidException("Education is not valid to add category");
+        }
+        BeanUtils.copyProperties(employeePatchDto, employee);
+        employeeCategoryService.process(employee);
+        courseService.process(employee);
     }
 
+    private void patchCategoryDeadline(Employee employee, EmployeePatchDto employeePatchDto) {
+        if (!employeeValidationService.categoryIsValid(employee)) {
+            throw new CategoryNotValidException("Category is not valid to edit assignment deadline date");
+        }
+        BeanUtils.copyProperties(employeePatchDto, employee);
+        employeeCategoryService.setCategoryAssignmentDeadlineDate(employee, employee.getCategoryAssignmentDeadlineDate());
+        courseService.process(employee);
+    }
+
+    private void patchEmployeeExemption(Employee employee, EmployeePatchDto employeePatchDto) {
+        if (!employeeValidationService.categoryIsValid(employee)) {
+            throw new CategoryNotValidException("Category is not valid to add exemption");
+        }
+        BeanUtils.copyProperties(employeePatchDto, employee);
+        employeeExemptionService.process(employee);
+    }
+
+    private void patchEmployeeEducation(Employee employee, EmployeePatchDto employeePatchDto) {
+        BeanUtils.copyProperties(employeePatchDto, employee);
+    }
+
+    private void patchEmployeeActive(Employee employee, EmployeePatchDto employeePatchDto) {
+        BeanUtils.copyProperties(employeePatchDto, employee);
+        System.out.println(employeePatchDto);
+        employeeExemptionService.process(employee);
+    }
 }

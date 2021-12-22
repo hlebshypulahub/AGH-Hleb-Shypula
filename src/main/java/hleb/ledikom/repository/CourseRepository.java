@@ -1,6 +1,6 @@
 package hleb.ledikom.repository;
 
-import hleb.ledikom.model.employee.Course;
+import hleb.ledikom.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

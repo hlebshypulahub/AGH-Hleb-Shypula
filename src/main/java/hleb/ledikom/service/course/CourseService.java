@@ -1,57 +1,65 @@
 package hleb.ledikom.service.course;
 
-import hleb.ledikom.model.employee.Course;
+import hleb.ledikom.model.Course;
 import hleb.ledikom.model.employee.Employee;
+import hleb.ledikom.model.enumeration.Category;
 import hleb.ledikom.repository.CourseRepository;
-import hleb.ledikom.repository.EmployeeRepository;
-import hleb.ledikom.service.employee.EmployeeDataService;
+import hleb.ledikom.service.employee.EmployeeValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class CourseService {
 
-    @Autowired
-    CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+    private final EmployeeValidationService employeeValidationService;
 
     @Autowired
-    EmployeeDataService employeeDataService;
-
-    @Autowired
-    EmployeeRepository employeeRepository;
-
-    public void addCourseForEmployee(Employee employee, Course course) {
-        addCourse(employee, course);
+    public CourseService(CourseRepository courseRepository, EmployeeValidationService employeeValidationService) {
+        this.courseRepository = courseRepository;
+        this.employeeValidationService = employeeValidationService;
     }
 
-    public Course addCourseForEmployee(Long employeeId, Course course) {
-        return addCourse(employeeDataService.findById(employeeId), course);
+    public Course addCourseForEmployee(Employee employee, Course course) {
+        return addCourse(employee, course);
     }
 
     private Course addCourse(Employee employee, Course course) {
         employee.addCourse(course);
 
-        if (employeeDataService.categoryIsValid(employee) && employeeDataService.educationIsValid(employee)) {
+        if (employeeValidationService.categoryIsValid(employee) && employeeValidationService.educationIsValid(employee)) {
             process(employee);
         }
 
         return courseRepository.save(course);
     }
 
-    public Employee process(@Valid Employee employee) {
-        employee.setCourseHoursSum(employee.getCourses().stream().filter(course ->
-                !course.getStartDate().isBefore(employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS))
-                        && course.getEndDate().isBefore(employee.getCategoryAssignmentDeadlineDate())
-        ).mapToInt(Course::getHours).sum());
-
-        return employeeDataService.save(employee);
+    public void process(@Valid Employee employee) {
+        if (employeeValidationService.categoryIsValid(employee)) {
+            if (employee.getCategory() == Category.NONE) {
+                employee.setCourseHoursSum(employee.getCourses().stream().filter(course ->
+                        courseIsBetweenDates(course,
+                                employee.getCategoryAssignmentDeadlineDate().minusYears(Employee.CATEGORY_VERIFICATION_YEARS),
+                                employee.getCategoryAssignmentDeadlineDate())
+                ).mapToInt(Course::getHours).sum());
+            } else {
+                employee.setCourseHoursSum(employee.getCourses().stream().filter(course ->
+                        courseIsBetweenDates(course,
+                                employee.getCategoryAssignmentDate(), employee.getCategoryAssignmentDeadlineDate())
+                ).mapToInt(Course::getHours).sum());
+            }
+        }
     }
 
     public List<Course> getCoursesForEmployee(Long employeeId) {
         return courseRepository.findAddByEmployeeId(employeeId);
     }
 
+    private boolean courseIsBetweenDates(Course course, LocalDate date1, LocalDate date2) {
+        return !course.getStartDate().isBefore(date1) && course.getEndDate().isBefore(date2);
+    }
 }

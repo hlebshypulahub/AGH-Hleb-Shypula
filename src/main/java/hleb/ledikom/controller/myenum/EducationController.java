@@ -1,6 +1,6 @@
 package hleb.ledikom.controller.myenum;
 
-import hleb.ledikom.model.employee.Education;
+import hleb.ledikom.model.enumeration.Education;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -14,10 +14,10 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${coursecounter.app.jwtSecret}")
+    @Value("${coursemanager.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${coursecounter.app.jwtExpirationMs}")
+    @Value("${coursemanager.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
@@ -25,7 +25,7 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
-                   .setExpiration(new Date((new Date()).getTime() + 3600 * 24 * 7 * 1000 /* jwtExpirationMs */)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+                   .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                    .compact();
     }
 

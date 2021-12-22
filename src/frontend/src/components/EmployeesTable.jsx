@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router";
-import { DataGrid } from "@mui/x-data-grid";
-import { getEmployees } from "../services/employee.service";
-// import { LocaldateFormatter as formatter } from "../helpers/LocaldateFormatter";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DateParser as parse } from "../helpers/DateParser";
 import "../css/EmployeesTable.scss";
 
 const EmployeesTable = (props) => {
-    const [employees, setEmployees] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+    const employees = props.employees;
 
     const history = useHistory();
 
-    useEffect(() => {
-        const fetchEmployees = () => {
-            getEmployees().then((data) => {
-                setEmployees(data);
-                setLoading(false);
-            });
-        };
-
-        fetchEmployees();
-    }, []);
-
     const columns = [
-        { field: "fullName", headerName: "Imię i nazwisko", width: 200 },
+        { field: "fullName", headerName: "Imię i nazwisko", width: 250 },
         {
             field: "hiringDate",
             headerName: "Data zatrudnienia",
@@ -98,6 +85,16 @@ const EmployeesTable = (props) => {
             field: "courseHoursSum",
             headerName: "Suma godzin",
             type: "number",
+            hide: true,
+            headerAlign: "left",
+            align: "left",
+            flex: 1,
+            minWidth: 200,
+        },
+        {
+            field: "courseHoursLeft",
+            headerName: "Pozostała ilość godzin",
+            type: "number",
             headerAlign: "left",
             align: "left",
             flex: 1,
@@ -120,6 +117,7 @@ const EmployeesTable = (props) => {
         {
             field: "eduGraduationDate",
             headerName: "Data zakończenia studiów",
+            type: "date",
             hide: true,
             flex: 1,
             minWidth: 200,
@@ -142,6 +140,7 @@ const EmployeesTable = (props) => {
                   docsSubmitDeadlineDate,
                   categoryPossiblePromotionDate,
                   courseHoursSum,
+                  courseHoursLeft,
                   education,
                   eduName,
                   eduGraduationDate,
@@ -149,28 +148,29 @@ const EmployeesTable = (props) => {
                   return {
                       id,
                       fullName,
-                      hiringDate,
+                      hiringDate: parse(hiringDate),
                       jobFacility,
                       position,
                       qualification,
                       category: category ? category.label : "",
                       categoryNumber,
-                      categoryAssignmentDate,
-                      categoryAssignmentDeadlineDate,
-                      docsSubmitDeadlineDate,
-                      categoryPossiblePromotionDate,
+                      categoryAssignmentDate: parse(categoryAssignmentDate),
+                      categoryAssignmentDeadlineDate: parse(
+                          categoryAssignmentDeadlineDate
+                      ),
+                      docsSubmitDeadlineDate: parse(docsSubmitDeadlineDate),
+                      categoryPossiblePromotionDate: parse(
+                          categoryPossiblePromotionDate
+                      ),
                       courseHoursSum,
+                      courseHoursLeft,
                       education: education ? education.label : "",
                       eduName,
-                      eduGraduationDate,
+                      eduGraduationDate: parse(eduGraduationDate),
                   };
               }
           )
         : [];
-
-    if (isLoading) {
-        return <h1>Loading...</h1>;
-    }
 
     return (
         <div className="EmployeesTable">
@@ -179,8 +179,15 @@ const EmployeesTable = (props) => {
                     onRowDoubleClick={(rowData) => {
                         history.push("/employees/" + rowData.row.id);
                     }}
+                    onRowClick={(rowData) => {
+                        props.setEmployeeId(rowData.row.id);
+                    }}
                     rows={rows}
                     columns={columns}
+                    components={{
+                        Toolbar: GridToolbar,
+                    }}
+                    loading={props.tableLoading}
                 />
             </div>
         </div>

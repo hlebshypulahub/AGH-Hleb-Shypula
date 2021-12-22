@@ -1,0 +1,12 @@
+{
+  "properties": [
+    {
+      "name": "coursemanager.app.jwtSecret",
+      "type": "java.lang.String",
+      "description": "the secret key property for security purpose."
+    },
+    {
+      "name": "coursemanager.app.jwtExpirationMs",
+      "type": "java.lang.String"
+    }
+  ] }

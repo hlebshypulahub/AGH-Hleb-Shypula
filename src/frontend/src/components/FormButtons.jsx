@@ -9,7 +9,6 @@ const FormButtons = (props) => {
 
     return (
         <>
-            {" "}
             <Button
                 variant="contained"
                 endIcon={<CancelIcon />}
@@ -19,11 +18,17 @@ const FormButtons = (props) => {
                     fontWeight: "bold",
                     height: "40px",
                 }}
-                onClick={() => {
-                    history.goBack();
-                }}
+                onClick={
+                    props.cancelFunc
+                        ? () => {
+                              props.cancelFunc();
+                          }
+                        : () => {
+                              history.goBack();
+                          }
+                }
             >
-                Anuluj
+                {props.cancelText ? props.cancelText : "Anuluj"}
             </Button>
             <Button
                 variant="contained"
@@ -37,7 +42,7 @@ const FormButtons = (props) => {
                 }}
                 type="submit"
             >
-                Zatwierdź
+                {props.acceptText ? props.acceptText : "Zatwierdź"}
             </Button>
         </>
     );

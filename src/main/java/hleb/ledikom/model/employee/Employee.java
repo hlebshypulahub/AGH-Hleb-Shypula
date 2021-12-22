@@ -2,12 +2,17 @@ package hleb.ledikom.model.employee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hleb.ledikom.model.Course;
+import hleb.ledikom.model.enumeration.Category;
+import hleb.ledikom.model.enumeration.Education;
+import hleb.ledikom.model.enumeration.Exemption;
 import hleb.ledikom.validator.CategoryDatesNotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,7 +34,7 @@ public class Employee {
 
     /// Id from accounting app
     @NotNull(message = "foreignId cannot be null")
-    long foreignId;
+    Long foreignId;
 
     /// Main info
     @NotBlank(message = "fullName cannot be blank")
@@ -38,6 +43,7 @@ public class Employee {
     @NotNull(message = "hiringDate cannot be null")
     private LocalDate hiringDate;
     /// ????????????????????????????????? validate
+    @NotBlank(message = "jobFacility cannot be blank")
     private String jobFacility;
     @NotBlank(message = "position cannot be blank")
     private String position;
@@ -55,17 +61,15 @@ public class Employee {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate categoryPossiblePromotionDate;
 
-    /// Course hours sum
-    private int courseHoursSum;
-
     /// Courses
     @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
 //    @JsonManagedReference
     @JsonIgnore
     private Set<Course> courses;
+    private int courseHoursSum;
 
     /// Exemption
-    private CertificationExemptionReason certificationExemptionReason;
+    private Exemption exemption;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate exemptionStartDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
@@ -85,32 +89,6 @@ public class Employee {
 
     }
 
-    public Employee(Employee other) {
-        this.id = other.id;
-        this.foreignId = other.foreignId;
-        this.fullName = other.fullName;
-        this.hiringDate = other.hiringDate;
-        this.jobFacility = other.jobFacility;
-        this.position = other.position;
-        this.qualification = other.qualification;
-        this.category = other.category;
-        this.categoryNumber = other.categoryNumber;
-        this.categoryAssignmentDate = other.categoryAssignmentDate;
-        this.categoryAssignmentDeadlineDate = other.categoryAssignmentDeadlineDate;
-        this.docsSubmitDeadlineDate = other.docsSubmitDeadlineDate;
-        this.categoryPossiblePromotionDate = other.categoryPossiblePromotionDate;
-        this.courseHoursSum = other.courseHoursSum;
-        this.courses = other.courses;
-        this.certificationExemptionReason = other.certificationExemptionReason;
-        this.exemptionStartDate = other.exemptionStartDate;
-        this.exemptionEndDate = other.exemptionEndDate;
-        this.exemptioned = other.exemptioned;
-        this.active = other.active;
-        this.education = other.education;
-        this.eduName = other.eduName;
-        this.eduGraduationDate = other.eduGraduationDate;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
@@ -128,8 +106,8 @@ public class Employee {
                 ", docsSubmitDeadlineDate=" + docsSubmitDeadlineDate +
                 ", categoryPossiblePromotionDate=" + categoryPossiblePromotionDate +
                 ", courseHoursSum=" + courseHoursSum +
-                ", courses quantity=" + courses.size() +
-                ", certificationExemptionReason=" + certificationExemptionReason +
+                ", courses quantity=" + ((courses == null) ? 0 : courses.size()) +
+                ", exemption=" + exemption +
                 ", exemptionStartDate=" + exemptionStartDate +
                 ", exemptionEndDate=" + exemptionEndDate +
                 ", exemptioned=" + exemptioned +
@@ -140,13 +118,28 @@ public class Employee {
                 '}';
     }
 
-    public Employee(Category category) {
-        this.category = category;
-    }
-
     public void addCourse(Course course) {
         course.setEmployee(this);
+        if (this.courses == null) {
+            this.courses = new HashSet<>();
+        }
         this.courses.add(course);
+    }
+
+    public Integer getCourseHoursLeft() {
+        if (education != null && category != null) {
+            int hours;
+
+            if (category == Category.NONE) {
+                hours = education.getRequiredHoursNoneCategory() - courseHoursSum;
+            } else {
+                hours = education.getRequiredHours() - courseHoursSum;
+            }
+
+            return Math.max(0, hours);
+        }
+
+        return null;
     }
 
     public Long getId() {
@@ -157,11 +150,11 @@ public class Employee {
         this.id = id;
     }
 
-    public long getForeignId() {
+    public Long getForeignId() {
         return foreignId;
     }
 
-    public void setForeignId(long foreignId) {
+    public void setForeignId(Long foreignId) {
         this.foreignId = foreignId;
     }
 
@@ -213,12 +206,12 @@ public class Employee {
         this.active = active;
     }
 
-    public CertificationExemptionReason getCertificationExemptionReason() {
-        return certificationExemptionReason;
+    public Exemption getExemption() {
+        return exemption;
     }
 
-    public void setCertificationExemptionReason(CertificationExemptionReason certificationExemptionReason) {
-        this.certificationExemptionReason = certificationExemptionReason;
+    public void setExemption(Exemption exemption) {
+        this.exemption = exemption;
     }
 
     public LocalDate getExemptionStartDate() {

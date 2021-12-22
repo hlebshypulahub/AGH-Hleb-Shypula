@@ -1,6 +1,6 @@
 package hleb.ledikom.validator;
 
-import hleb.ledikom.model.employee.Category;
+import hleb.ledikom.model.enumeration.Category;
 import hleb.ledikom.model.employee.dto.EmployeeCategoryPatchDto;
 import org.apache.commons.lang3.StringUtils;
 

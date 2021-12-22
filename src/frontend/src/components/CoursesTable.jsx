@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import "../css/CoursesTable.scss";
+import { DateParser as parse } from "../helpers/DateParser";
 
 import { getEmployeeCourses } from "../services/course.service";
 
 const CoursesTable = (props) => {
     const employeeId = props.employeeId;
     const [courses, setCourses] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCourses = () => {
             getEmployeeCourses(employeeId).then((data) => {
                 setCourses(data);
+                setLoading(false);
             });
         };
 
@@ -37,12 +40,14 @@ const CoursesTable = (props) => {
         },
         {
             field: "startDate",
+            type: "date",
             headerName: "Data początku",
             flex: 1,
             minWidth: 200,
         },
         {
             field: "endDate",
+            type: "date",
             headerName: "Data końca",
             flex: 1,
             minWidth: 200,
@@ -57,8 +62,8 @@ const CoursesTable = (props) => {
                       name,
                       description,
                       hours,
-                      startDate,
-                      endDate,
+                      startDate: parse(startDate),
+                      endDate: parse(endDate),
                   };
               }
           )
@@ -67,7 +72,7 @@ const CoursesTable = (props) => {
     return (
         <div className="CoursesTable">
             <div className="table">
-                <DataGrid rows={rows} columns={columns} />
+                <DataGrid rows={rows} columns={columns} loading={isLoading} />
             </div>
         </div>
     );

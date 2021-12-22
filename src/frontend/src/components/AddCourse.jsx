@@ -8,6 +8,8 @@ import { useHistory } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import FormButtons from "./FormButtons";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { addCourseToEmployee } from "../services/course.service";
 import { DateFormatter as format } from "../helpers/DateFormatter";
@@ -30,6 +32,7 @@ const AddCourse = (props) => {
         startDate: "",
         endDate: "",
     });
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const history = useHistory();
 
@@ -48,8 +51,9 @@ const AddCourse = (props) => {
             ? ""
             : "Należy podać datę końca kursu";
 
-        if(endDate < startDate) {
-            tempErrors.endDate = "Data końca kursu powinna być wcześniej niż data początku"
+        if (endDate < startDate) {
+            tempErrors.endDate =
+                "Data końca kursu powinna być wcześniej niż data początku";
         }
 
         setErrors(tempErrors);
@@ -71,7 +75,12 @@ const AddCourse = (props) => {
                 };
 
                 addCourseToEmployee(employeeId, course).then(() => {
-                    history.goBack();
+                    history.push({
+                        pathname: `/employees/${employeeId}`,
+                        state: {
+                            snackMessage: `Kurs został dodany`,
+                        },
+                    });
                 });
             }
         },
@@ -121,6 +130,10 @@ const AddCourse = (props) => {
         }
         setEndDate(newEndDate);
     };
+
+    if (!currentUser) {
+        return <Redirect to="/login" />;
+    }
 
     return (
         <div className="Form">

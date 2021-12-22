@@ -1,7 +1,10 @@
-@import "../css/fonts.css";
+@import "./fonts.scss";
 
 .EmployeeView {
     padding: 20px;
+    position: relative;
+
+    background-color: white;
 
     font-family: "Quicksand", sans-serif;
 
@@ -80,7 +83,8 @@
 
             .course-label,
             .course-hours,
-            .add-course-btn {
+            .add-course-btn,
+            .course-date-label {
                 color: white;
                 font-weight: 700;
                 position: absolute;
@@ -96,11 +100,18 @@
             .course-hours {
                 font-size: 60px;
                 left: 50%;
-                top: 30%;
+                top: 20%;
             }
 
             .course-label {
-                width: 284px;
+                width: 255px;
+                font-size: 24px;
+                left: 50%;
+                top: 40%;
+            }
+
+            .course-date-label {
+                width: 165px;
                 font-size: 24px;
                 left: 50%;
                 top: 50%;

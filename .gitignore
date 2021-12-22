@@ -36,3 +36,4 @@ build/
 src/fronend/node_modules/
 /src/frontend/package-lock.json
 /src/main/resources/application.properties
+/src/main/resources/application-test.properties

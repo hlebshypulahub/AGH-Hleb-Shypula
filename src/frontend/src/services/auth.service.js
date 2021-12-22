@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://localhost:8080/api/v1/auth";
+import { API_BASE_URL as baseUrl } from "./api.base.url";
+
+const API_BASE_URL = baseUrl + "/api/v1/auth";
 
 const login = (username, password) => {
     return fetch(API_BASE_URL + "/signin", {

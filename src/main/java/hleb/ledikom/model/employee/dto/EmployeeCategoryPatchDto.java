@@ -1,7 +1,7 @@
 package hleb.ledikom.model.employee.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import hleb.ledikom.model.employee.Category;
+import hleb.ledikom.model.enumeration.Category;
 import hleb.ledikom.validator.CategoryAssignmentDateNotNull;
 import hleb.ledikom.validator.CategoryNumberNotBlank;
 

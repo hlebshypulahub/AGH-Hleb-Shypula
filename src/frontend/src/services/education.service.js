@@ -1,6 +1,7 @@
 import authHeader from "./auth-header";
+import { API_BASE_URL as baseUrl } from "./api.base.url";
 
-const API_BASE_URL = "http://localhost:8080/api/v1/education";
+const API_BASE_URL = baseUrl + "/api/v1/education";
 
 export const getEducations = () => {
     return fetch(API_BASE_URL, {

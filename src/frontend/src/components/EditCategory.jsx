@@ -8,6 +8,10 @@ import { useHistory } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import FormButtons from "./FormButtons";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import Spinner from "../components/Spinner";
 
 import { getCategories } from "../services/category.service";
 import {
@@ -36,12 +40,17 @@ const EditCategory = (props) => {
         categoryNumber: "",
         categoryAssignmentDate: "",
     });
+    const [categoryLoaded, setCategoryLoaded] = useState(false);
+    const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+    const { user: currentUser } = useSelector((state) => state.auth);
+
     const history = useHistory();
 
     useEffect(() => {
         const fetchCategories = () => {
             getCategories().then((data) => {
                 setCategories(data);
+                setCategoriesLoaded(true);
             });
         };
 
@@ -69,6 +78,7 @@ const EditCategory = (props) => {
                 setCategory(data.category);
                 setCategoryNumber(data.categoryNumber);
                 setCategoryAssignmentDate(parse(data.categoryAssignmentDate));
+                setCategoryLoaded(true);
             });
         };
 
@@ -90,7 +100,12 @@ const EditCategory = (props) => {
                 };
 
                 patchEmployeeCategory(id, patch).then(() => {
-                    history.push(`/employees/${id}`);
+                    history.push({
+                        pathname: `/employees/${id}`,
+                        state: {
+                            snackMessage: `Kategoria została zmieniona`,
+                        },
+                    });
                 });
             }
         },
@@ -136,6 +151,14 @@ const EditCategory = (props) => {
         }
         setCategoryAssignmentDate(newCategoryAssignmentDate);
     };
+
+    if (!categoryLoaded || !categoriesLoaded) {
+        return <Spinner />;
+    }
+
+    if (!currentUser) {
+        return <Redirect to="/login" />;
+    }
 
     return (
         <div className="Form">

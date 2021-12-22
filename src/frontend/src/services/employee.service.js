@@ -1,26 +1,31 @@
 import authHeader from "./auth-header";
+import { API_BASE_URL as baseUrl } from "./api.base.url";
 
-const API_BASE_URL = "http://localhost:8080/api/v1/employees";
+const API_BASE_URL = baseUrl + "/api/v1/employees";
 
 export const getEmployees = () => {
-    return fetch(API_BASE_URL, {
+    return get(API_BASE_URL);
+};
+
+export const getEmployeesForCoursePlan = () => {
+    return get(API_BASE_URL + "/for-course-plan");
+};
+
+const get = (url) => {
+    return fetch(url, {
         method: "GET",
         headers: Object.assign(
             {},
             { "Content-type": "application/json" },
             authHeader()
         ),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.message);
-            }
-        })
-        .catch((error) => {
-            console.log(error.status + " " + error.message);
-        });
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(response.status, response.message);
+        }
+    });
 };
 
 export const getEmployeeById = (id) => {
@@ -31,25 +36,33 @@ export const getEmployeeById = (id) => {
             { "Content-type": "application/json" },
             authHeader()
         ),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(response.status, response.message);
-            }
-        })
-        .catch((error) => {
-            console.log(error.status + " " + error.message);
-        });
-};
-
-export const patchEmployeeEducation = (id, patch) => {
-    return patchEmployee(id, patch, "/education");
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error();
+        }
+    });
 };
 
 export const patchEmployeeCategory = (id, patch) => {
     return patchEmployee(id, patch, "/category");
+};
+
+export const patchEmployeeCategoryAssignmentDeadlineDate = (id, patch) => {
+    return patchEmployee(id, patch, "/category-deadline");
+};
+
+export const patchEmployeeActive = (id, patch) => {
+    return patchEmployee(id, patch, "/active");
+};
+
+export const patchEmployeeExemption = (id, patch) => {
+    return patchEmployee(id, patch, "/exemption");
+};
+
+export const patchEmployeeEducation = (id, patch) => {
+    return patchEmployee(id, patch, "/education");
 };
 
 const patchEmployee = (id, patch, path) => {
@@ -66,7 +79,6 @@ const patchEmployee = (id, patch, path) => {
             if (response.ok) {
                 return response.json();
             } else {
-                console.log(response.clone().json());
                 throw new Error(response.clone().json());
             }
         })

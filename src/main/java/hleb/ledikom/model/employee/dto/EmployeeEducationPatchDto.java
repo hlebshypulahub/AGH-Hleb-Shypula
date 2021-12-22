@@ -1,7 +1,7 @@
 package hleb.ledikom.model.employee.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import hleb.ledikom.model.employee.Education;
+import hleb.ledikom.model.enumeration.Education;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class EmployeeEducationPatchDto extends EmployeePatchDto {
 
-    @NotNull(message = "Education type cannot be empty")
+    @NotNull(message = "Education cannot be null")
     private Education education;
     @NotBlank(message = "Education name cannot be blank")
     private String eduName;

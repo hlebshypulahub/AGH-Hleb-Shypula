@@ -2,8 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import MyTextField from "./MyTextField";
 import MyDatePicker from "./MyDatePicker";
 import MenuItem from "@mui/material/MenuItem";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
+
+import Spinner from "../components/Spinner";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -24,6 +28,8 @@ import "../css/Form.scss";
 
 const EditEducation = (props) => {
     const id = props.match.params.id;
+    const [educationLoaded, setEducationLoaded] = useState(false);
+    const [educationsLoaded, setEducationsLoaded] = useState(false);
     const [education, setEducation] = useState({
         label: "",
         name: "",
@@ -39,6 +45,7 @@ const EditEducation = (props) => {
         eduName: "",
         eduGraduationDate: "",
     });
+    const { user: currentUser } = useSelector((state) => state.auth);
 
     const history = useHistory();
 
@@ -46,6 +53,7 @@ const EditEducation = (props) => {
         const fetchEducations = () => {
             getEducations().then((data) => {
                 setEducations(data);
+                setEducationsLoaded(true);
             });
         };
 
@@ -71,6 +79,7 @@ const EditEducation = (props) => {
                 setEduGraduationDate(parse(data.eduGraduationDate));
                 setEduName(data.eduName);
                 setEducation(data.education);
+                setEducationLoaded(true);
             });
         };
 
@@ -91,7 +100,12 @@ const EditEducation = (props) => {
                 };
 
                 patchEmployeeEducation(id, patch).then(() => {
-                    history.push(`/employees/${id}`);
+                    history.push({
+                        pathname: `/employees/${id}`,
+                        state: {
+                            snackMessage: `Wykształcenie zostało zmienione`,
+                        },
+                    });
                 });
             }
         },
@@ -124,6 +138,14 @@ const EditEducation = (props) => {
         }
         setEduGraduationDate(newEduGraduationDate);
     };
+
+    if (!educationLoaded || !educationsLoaded) {
+        return <Spinner />;
+    }
+
+    if (!currentUser) {
+        return <Redirect to="/login" />;
+    }
 
     return (
         <div className="Form">
