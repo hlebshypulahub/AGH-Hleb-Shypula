@@ -1,7 +1,7 @@
 package hleb.ledikom.controller;
 
 import hleb.ledikom.PracaInzLedikomKursyApplication;
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.repository.CourseRepository;
 import hleb.ledikom.repository.EmployeeRepository;

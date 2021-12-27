@@ -1,7 +1,7 @@
 package hleb.ledikom.employee;
 
 
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.enumeration.Category;
 import hleb.ledikom.model.enumeration.Education;

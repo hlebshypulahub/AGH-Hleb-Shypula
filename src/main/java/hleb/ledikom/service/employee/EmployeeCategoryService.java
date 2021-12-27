@@ -1,7 +1,7 @@
 package hleb.ledikom.service.employee;
 
 import hleb.ledikom.exception.EmptyCoursesListException;
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import hleb.ledikom.model.employee.Employee;
 import hleb.ledikom.model.enumeration.Category;
 import org.springframework.stereotype.Service;

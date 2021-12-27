@@ -1,6 +1,6 @@
 package hleb.ledikom.validator;
 
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

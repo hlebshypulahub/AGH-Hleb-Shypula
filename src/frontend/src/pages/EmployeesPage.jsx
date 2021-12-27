@@ -71,6 +71,10 @@ const EmployeesPage = (props) => {
         };
 
         fetchEmployees();
+
+        return () => {
+            setEmployees([]);
+        };
     }, []);
 
     const fetchEmployeesForCoursePlan = () => {

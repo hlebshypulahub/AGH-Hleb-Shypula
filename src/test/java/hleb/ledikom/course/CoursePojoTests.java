@@ -1,6 +1,6 @@
 package hleb.ledikom.course;
 
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import hleb.ledikom.model.employee.Employee;
 import org.junit.jupiter.api.Test;
 

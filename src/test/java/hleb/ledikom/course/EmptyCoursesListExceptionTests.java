@@ -1,7 +1,7 @@
 package hleb.ledikom.course;
 
 import hleb.ledikom.exception.EmptyCoursesListException;
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

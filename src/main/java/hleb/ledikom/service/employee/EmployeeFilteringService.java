@@ -30,7 +30,8 @@ public class EmployeeFilteringService {
         NotificationTerm notificationTerm = notificationTermRepository.findById(791L).orElse(new NotificationTerm(12, 24));
 
         for (@Valid Employee employee : employees) {
-            if (employeeValidationService.educationIsValid(employee) && employeeValidationService.categoryIsValid(employee)
+            if (employeeValidationService.educationIsValid(employee)
+                    && employeeValidationService.categoryIsValid(employee)
                     && employee.isActive()
                     && (employee.getEducation() == Education.HIGHER && employee.getCategoryAssignmentDeadlineDate().isBefore(LocalDate.now().plusMonths(notificationTerm.getMonthsHigherEducation())))
                     || (employee.getEducation() == Education.SECONDARY && employee.getCategoryAssignmentDeadlineDate().isBefore(LocalDate.now().plusMonths(notificationTerm.getMonthsSecondaryEducation())))) {

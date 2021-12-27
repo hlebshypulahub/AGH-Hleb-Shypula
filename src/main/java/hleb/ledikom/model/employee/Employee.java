@@ -2,7 +2,7 @@ package hleb.ledikom.model.employee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hleb.ledikom.model.Course;
+import hleb.ledikom.model.course.Course;
 import hleb.ledikom.model.enumeration.Category;
 import hleb.ledikom.model.enumeration.Education;
 import hleb.ledikom.model.enumeration.Exemption;

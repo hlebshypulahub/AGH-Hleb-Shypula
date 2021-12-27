@@ -24,8 +24,11 @@ public class JwtUtils {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+        /// 3 months
+        long expirationMs = 7776000000L;
+
         return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
-                   .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+                   .setExpiration(new Date((new Date()).getTime() + expirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                    .compact();
     }
 

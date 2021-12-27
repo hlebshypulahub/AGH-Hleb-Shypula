@@ -1,4 +1,4 @@
-package hleb.ledikom.model;
+package hleb.ledikom.model.course;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
